@@ -679,7 +679,8 @@
 
                 const taskText = document.createElement('span');
                 taskText.textContent = task.text;
-                taskText.className = `task-list-item-text text-lg font-medium ${task.completed ? 'completed' : ''}`;
+                // Add text-gray-800 to ensure dark mode color consistency
+                taskText.className = `task-list-item-text text-lg font-medium text-gray-800 ${task.completed ? 'completed' : ''}`;
 
                 taskContent.appendChild(checkbox);
                 taskContent.appendChild(taskText);
@@ -1143,7 +1144,12 @@
         function appendMessage(sender, text) {
             const messageDiv = document.createElement('div');
             messageDiv.className = sender === 'user' ? 'user-message' : 'gemini-message';
-            messageDiv.textContent = text;
+
+            // Convert simple markdown to HTML
+            let htmlText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            htmlText = htmlText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            messageDiv.innerHTML = htmlText;
+
             chatHistory.appendChild(messageDiv);
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
@@ -1186,7 +1192,7 @@
         function clearGeminiChat() {
             chatConversation = [];
             chatHistory.innerHTML = '';
-            appendMessage('gemini', "Hello! I'm Gemini. What can I help you with today? You can even ask me math questions, like 'What is the quadratic formula?'");
+            appendMessage('gemini', "Whats up Dumb Bitch... What u need'");
         }
 
         // Event listener for the "New Chat" button
