@@ -993,6 +993,11 @@
 
         // Draggable functionality for Gemini modal
         geminiHeader.addEventListener('mousedown', (e) => {
+            // Prevent dragging if the target is the new chat button or the close button
+            if (e.target.closest('#new-chat-btn') || e.target.closest('#close-gemini')) {
+                return;
+            }
+
             isDraggingGemini = true;
             offsetGemini.x = e.clientX - geminiContent.offsetLeft;
             offsetGemini.y = e.clientY - geminiContent.offsetTop;
@@ -1006,6 +1011,7 @@
         });
 
         document.addEventListener('mouseup', () => {
+            isDraggingGemini = false;
             isResizing = false;
         });
 
@@ -1033,10 +1039,6 @@
                     geminiContent.style.height = newHeight + 'px';
                 }
             }
-        });
-
-        document.addEventListener('mouseup', () => {
-            isResizing = false;
         });
 
         // Double-click to toggle fullscreen
