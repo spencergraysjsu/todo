@@ -282,7 +282,8 @@
         .floating-logo {
             position: fixed;
             z-index: -1;
-            width: 150px; /* Fixed size for the logo */
+            width: 150px;
+            /* Fixed size for the logo */
             height: 150px;
             object-fit: contain;
             transition: opacity 0.3s ease;
@@ -408,8 +409,8 @@
                         <button id="logo-dropdown-header"
                             class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
                             <h4 class="text-base font-semibold">Logo</h4>
-                            <svg class="h-5 w-5 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="h-5 w-5 transform transition-transform duration-200" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
@@ -424,7 +425,8 @@
                             <div class="mt-4">
                                 <input type="text" id="logo-url-input" placeholder="Enter image URL..."
                                     class="w-full p-2 text-sm border-2 border-gray-300 rounded-lg animated-input">
-                                <button id="save-logo-url" class="w-full mt-2 px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all duration-200">
+                                <button id="save-logo-url"
+                                    class="w-full mt-2 px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all duration-200">
                                     Save Logo
                                 </button>
                             </div>
@@ -444,7 +446,8 @@
                     </svg>
                 </button>
                 <div class="dropdown-content">
-                    <p class="text-sm text-gray-600 mb-3">Paste your Google AI Studio API key here to enable Gemini features.</p>
+                    <p class="text-sm text-gray-600 mb-3">Paste your Google AI Studio API key here to enable Gemini
+                        features.</p>
                     <input type="text" id="api-key-input" placeholder="Paste your API key here..."
                         class="w-full p-2 text-sm border-2 border-gray-300 rounded-xl animated-input">
                     <button id="save-api-key"
@@ -555,7 +558,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
             </button>
         </form>
@@ -566,7 +569,8 @@
     <div id="custom-alert-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">API Key Required</h2>
-            <p id="custom-alert-message" class="text-gray-600 mb-6">Please go to **Settings > AI Features** to import your Google AI Studio API key to enable AI features.</p>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">Please go to **Settings > AI Features** to import
+                your Google AI Studio API key to enable AI features.</p>
             <div class="flex justify-end">
                 <button id="close-alert-button"
                     class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-600 transition-all duration-200 focus:outline-none">
@@ -610,8 +614,6 @@
         const logoToggle = document.getElementById('logo-toggle');
         const logoUrlInput = document.getElementById('logo-url-input');
         const saveLogoUrlButton = document.getElementById('save-logo-url');
-        const styleDropdownContainer = document.getElementById('style-dropdown-container');
-        const logoDropdownHeader = document.getElementById('logo-dropdown-header');
 
         // New Gemini chat elements
         const geminiButton = document.getElementById('gemini-button');
@@ -926,7 +928,7 @@
                 addSubtaskInput.type = 'text';
                 addSubtaskInput.placeholder = 'Add a new subtask...';
                 addSubtaskInput.className = 'animated-input flex-grow p-2 text-sm border-2 border-gray-300 rounded-lg focus:outline-none transition-colors duration-200';
-                
+
                 const addSubtaskButton = document.createElement('button');
                 addSubtaskButton.type = 'submit';
                 addSubtaskButton.className = 'p-2 bg-blue-500 text-white rounded-xl shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400';
@@ -1077,47 +1079,41 @@
             isDraggingSettings = false;
         });
 
-        // Dropdown logic
+        // Corrected Dropdown logic
         const dropdownHeaders = document.querySelectorAll('.dropdown-header');
+        const styleDropdownContainer = document.getElementById('style-dropdown-container');
+        const styleDropdownContent = styleDropdownContainer.querySelector('.dropdown-content');
+        const logoDropdownHeader = document.getElementById('logo-dropdown-header');
+        const logoDropdownContent = logoDropdownHeader.nextElementSibling;
+
         dropdownHeaders.forEach(header => {
             header.addEventListener('click', () => {
                 const clickedContent = header.nextElementSibling;
                 const clickedIcon = header.querySelector('svg');
+                const isStyleOrLogo = header.closest('#style-dropdown-container') !== null;
+                const isStyleDropdownHeader = header.closest('#style-dropdown-container') && header.id !== 'logo-dropdown-header';
                 const isLogoDropdownHeader = header.id === 'logo-dropdown-header';
-                
-                // Close other top-level dropdowns, with the exception for the Style dropdown's child.
-                document.querySelectorAll('.settings-dropdown > .dropdown-header').forEach(otherHeader => {
-                    const otherContent = otherHeader.nextElementSibling;
-                    const otherIcon = otherHeader.querySelector('svg');
-                    const isOtherStyleDropdown = otherHeader.closest('#style-dropdown-container');
 
-                    // Do not close the Style or Logo dropdown if a header within the Style dropdown is clicked
-                    if (isLogoDropdownHeader && isOtherStyleDropdown) {
-                        return;
-                    }
-
-                    // If a non-Style dropdown is clicked, close both Style and Logo
-                    if (!isLogoDropdownHeader && !isOtherStyleDropdown && otherHeader.id !== header.id) {
-                        const styleContent = styleDropdownContainer.querySelector('.dropdown-content');
-                        const styleIcon = styleDropdownContainer.querySelector('.dropdown-header svg');
-                        styleContent.classList.remove('open');
-                        styleIcon.classList.remove('rotate-180');
-                        
-                        const logoContent = logoDropdownHeader.nextElementSibling;
-                        const logoIcon = logoDropdownHeader.querySelector('svg');
-                        logoContent.classList.remove('open');
-                        logoIcon.classList.remove('rotate-180');
-                    }
-
-                    if (otherContent.classList.contains('open') && otherHeader.id !== header.id) {
-                        otherContent.classList.remove('open');
-                        otherIcon.classList.remove('rotate-180');
-                    }
+                // Close all dropdowns
+                document.querySelectorAll('.dropdown-content.open').forEach(content => {
+                    content.classList.remove('open');
+                    content.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
                 });
 
-                // Toggle the clicked one
-                clickedContent.classList.toggle('open');
-                clickedIcon.classList.toggle('rotate-180');
+                // If the clicked one is a top-level dropdown (not part of Style or Logo)
+                if (!isStyleOrLogo) {
+                    clickedContent.classList.add('open');
+                    clickedIcon.classList.add('rotate-180');
+                } else {
+                    // It is a Style or Logo dropdown
+                    styleDropdownContent.classList.add('open');
+                    styleDropdownContainer.querySelector('.dropdown-header svg').classList.add('rotate-180');
+
+                    if (isLogoDropdownHeader) {
+                        logoDropdownContent.classList.add('open');
+                        logoDropdownHeader.querySelector('svg').classList.add('rotate-180');
+                    }
+                }
             });
         });
 
@@ -1216,7 +1212,7 @@
                 floatingLogo.style.left = logoX + 'px';
                 floatingLogo.style.top = logoY + 'px';
             }
-            
+
             animationFrameId = requestAnimationFrame(animateBackground);
         }
 
@@ -1290,11 +1286,11 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
         });
-        
+
         window.addEventListener('resize', () => {
             resizeCanvas();
             if (logoEnabled && floatingLogo.src) {
-                 // Reset logo position to prevent it from going off-screen
+                // Reset logo position to prevent it from going off-screen
                 logoX = Math.random() * (window.innerWidth - floatingLogo.offsetWidth);
                 logoY = Math.random() * (window.innerHeight - floatingLogo.offsetHeight);
             }
@@ -1592,7 +1588,7 @@
                 } finally {
                     chatInput.disabled = false;
                     chatInput.focus();
-                    chatSendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>`;
+                    chatSendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>`;
                     chatSendButton.disabled = false;
                 }
             }
@@ -1602,7 +1598,7 @@
         function clearGeminiChat() {
             chatConversation = [];
             chatHistory.innerHTML = '';
-            appendMessage('gemini', "Stupid Bitch... Tf u need now??");
+            appendMessage('gemini', "Hello! I'm Gemini. What can I help you with today?");
         }
 
         // Event listener for the "New Chat" button
