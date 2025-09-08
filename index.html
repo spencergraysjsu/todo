@@ -31,7 +31,6 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            /* For the resizable handle */
         }
 
         /* Dark mode styles */
@@ -77,6 +76,7 @@
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
@@ -88,6 +88,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -99,6 +100,7 @@
                 opacity: 1;
                 transform: scale(1);
             }
+
             to {
                 opacity: 0;
                 transform: scale(0.95);
@@ -129,7 +131,6 @@
 
         .subtasks-container.expanded {
             max-height: 500px;
-            /* A generous height to allow content to show */
             opacity: 1;
         }
 
@@ -146,6 +147,7 @@
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
@@ -229,14 +231,20 @@
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">My To-Do List</h1>
             <div class="flex items-center space-x-2">
-                <button id="gemini-button" class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8">
+                <button id="gemini-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-8 h-8">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                     </svg>
                 </button>
-                <button id="settings-button" class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 15a3 3 0 100-6 3 3 0 000 6z" />
+                <button id="settings-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 15a3 3 0 100-6 3 3 0 000 6z" />
                     </svg>
                 </button>
             </div>
@@ -290,8 +298,10 @@
     <div id="settings-content" class="hidden bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
         <div id="settings-header" class="drag-handle flex items-center justify-between mb-4">
             <h2 class="text-2xl font-semibold text-gray-800">Settings</h2>
-            <button id="close-settings" class="p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:scale-105 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button id="close-settings"
+                class="p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:scale-105 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -300,31 +310,60 @@
         <div id="dropdowns-container" class="space-y-4">
             <!-- Dark Mode Dropdown -->
             <div class="settings-dropdown border-b border-gray-200 pb-2">
-                <button class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                <button
+                    class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
                     <h3 class="text-lg font-semibold">Dark Mode</h3>
-                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
                 <div class="dropdown-content">
-                    <button id="dark-mode-toggle" class="w-full px-4 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all duration-200">
+                    <button id="dark-mode-toggle"
+                        class="w-full px-4 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all duration-200">
                         Toggle Dark Mode
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Key Dropdown -->
+            <div class="settings-dropdown border-b border-gray-200 pb-2">
+                <button
+                    class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                    <h3 class="text-lg font-semibold">AI Features</h3>
+                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="dropdown-content">
+                    <p class="text-sm text-gray-600 mb-3">Paste your Google AI Studio API key here to enable Gemini features.</p>
+                    <input type="text" id="api-key-input" placeholder="Paste your API key here..."
+                        class="w-full p-2 text-sm border-2 border-gray-300 rounded-xl animated-input">
+                    <button id="save-api-key"
+                        class="w-full mt-2 px-4 py-3 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all duration-200">
+                        Save API Key
                     </button>
                 </div>
             </div>
 
             <!-- Export Data Dropdown -->
             <div class="settings-dropdown border-b border-gray-200 pb-2">
-                <button class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                <button
+                    class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
                     <h3 class="text-lg font-semibold">Export Data</h3>
-                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
                 <div class="dropdown-content">
-                    <p class="text-sm text-gray-600 mb-3">Copy your data "seed" to save a backup or transfer to another device.</p>
-                    <textarea id="export-data" readonly class="w-full h-24 p-2 text-sm border-2 border-gray-300 rounded-xl bg-gray-50 focus:outline-none resize-none"></textarea>
-                    <button id="copy-export-data" class="w-full mt-2 px-4 py-3 rounded-full bg-green-500 text-white font-semibold hover:bg-green-600 transition-all duration-200">
+                    <p class="text-sm text-gray-600 mb-3">Copy your data "seed" to save a backup or transfer to another
+                        device.</p>
+                    <textarea id="export-data" readonly
+                        class="w-full h-24 p-2 text-sm border-2 border-gray-300 rounded-xl bg-gray-50 focus:outline-none resize-none"></textarea>
+                    <button id="copy-export-data"
+                        class="w-full mt-2 px-4 py-3 rounded-full bg-green-500 text-white font-semibold hover:bg-green-600 transition-all duration-200">
                         Copy to Clipboard
                     </button>
                 </div>
@@ -332,16 +371,20 @@
 
             <!-- Import Data Dropdown -->
             <div class="settings-dropdown border-b border-gray-200 pb-2">
-                <button class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                <button
+                    class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
                     <h3 class="text-lg font-semibold">Import Data</h3>
-                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
                 <div class="dropdown-content">
                     <p class="text-sm text-gray-600 mb-3">Paste a "seed" phrase here to import your to-do list data.</p>
-                    <textarea id="import-data" placeholder="Paste your seed phrase here..." class="w-full h-24 p-2 text-sm border-2 border-gray-300 rounded-xl animated-input resize-none"></textarea>
-                    <button id="import-button" class="w-full mt-2 px-4 py-3 rounded-full bg-purple-500 text-white font-semibold hover:bg-purple-600 transition-all duration-200">
+                    <textarea id="import-data" placeholder="Paste your seed phrase here..."
+                        class="w-full h-24 p-2 text-sm border-2 border-gray-300 rounded-xl animated-input resize-none"></textarea>
+                    <button id="import-button"
+                        class="w-full mt-2 px-4 py-3 rounded-full bg-purple-500 text-white font-semibold hover:bg-purple-600 transition-all duration-200">
                         Import Data
                     </button>
                 </div>
@@ -349,14 +392,17 @@
 
             <!-- Delete All Data Dropdown -->
             <div class="settings-dropdown">
-                <button class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                <button
+                    class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
                     <h3 class="text-lg font-semibold">Danger Zone</h3>
-                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
                 <div class="dropdown-content">
-                    <button id="delete-all-data" class="w-full px-4 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition-all duration-200">
+                    <button id="delete-all-data"
+                        class="w-full px-4 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition-all duration-200">
                         Delete All Data
                     </button>
                 </div>
@@ -365,15 +411,20 @@
     </div>
 
     <!-- Gemini Chat Modal (hidden by default) -->
-    <div id="gemini-content" class="hidden bg-white p-6 rounded-3xl shadow-xl flex flex-col modal-content" style="width: 500px; min-width: 300px; height: 500px; min-height: 300px;">
+    <div id="gemini-content"
+        class="hidden bg-white p-6 rounded-3xl shadow-xl flex flex-col modal-content"
+        style="width: 500px; min-width: 300px; height: 500px; min-height: 300px;">
         <div id="gemini-header" class="drag-handle flex items-center justify-between mb-4">
             <h2 class="text-2xl font-semibold text-gray-800">Gemini Chat</h2>
             <div class="flex items-center space-x-2">
-                <button id="new-chat-btn" class="px-4 py-2 rounded-full text-sm font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors duration-200 focus:outline-none">
+                <button id="new-chat-btn"
+                    class="px-4 py-2 rounded-full text-sm font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors duration-200 focus:outline-none">
                     New Chat
                 </button>
-                <button id="close-gemini" class="p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:scale-105 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="close-gemini"
+                    class="p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:scale-105 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -383,20 +434,39 @@
             <!-- Chat messages will be appended here -->
         </div>
         <form id="chat-form" class="flex items-center space-x-2">
-            <input type="text" id="chat-input" placeholder="Ask me anything..." class="animated-input flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none transition-colors duration-200">
-            <button type="submit" id="chat-send-button" class="bg-blue-500 text-white p-3 rounded-xl shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+            <input type="text" id="chat-input" placeholder="Ask me anything..."
+                class="animated-input flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none transition-colors duration-200">
+            <button type="submit" id="chat-send-button"
+                class="bg-blue-500 text-white p-3 rounded-xl shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
             </button>
         </form>
         <div class="resize-handle"></div>
     </div>
 
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">API Key Required</h2>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">Please go to **Settings > AI Features** to import your Google AI Studio API key to enable AI features.</p>
+            <div class="flex justify-end">
+                <button id="close-alert-button"
+                    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-600 transition-all duration-200 focus:outline-none">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const STORAGE_KEY = `todo-app-${appId}`;
+        const API_KEY_STORAGE_KEY = 'gemini-api-key';
 
         const taskForm = document.getElementById('task-form');
         const taskInput = document.getElementById('task-input');
@@ -429,6 +499,12 @@
         const newChatButton = document.getElementById('new-chat-btn');
         const resizeHandle = document.querySelector('.resize-handle');
 
+        // New API Key and Alert elements
+        const apiKeyInput = document.getElementById('api-key-input');
+        const saveApiKeyButton = document.getElementById('save-api-key');
+        const customAlertModal = document.getElementById('custom-alert-modal');
+        const customAlertMessage = document.getElementById('custom-alert-message');
+        const closeAlertButton = document.getElementById('close-alert-button');
 
         let tasks = [];
         let currentEditIndex = -1;
@@ -471,11 +547,16 @@
             });
         }
 
-        async function brainstormSubtasks(taskText) {
+        async function brainstormSubtasks(taskText, brainstormButton) {
+            const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            if (!apiKey) {
+                showCustomAlert("No API key found. Please import your key in Settings to use this feature.");
+                return;
+            }
+
             const systemPrompt = "You are a world-class project manager. Your goal is to take a high-level task and break it down into 5 to 7 smaller, actionable subtasks. Do not provide any introduction or conclusion, just the JSON array of strings.";
             const userQuery = `Break down the task "${taskText}" into a list of actionable subtasks.`;
 
-            const apiKey = "AIzaSyBqZ6ANNOOs1rnMiAUp51OPN-MEU1H5c74";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             const payload = {
@@ -499,6 +580,9 @@
                     }
                 }
             };
+
+            brainstormButton.innerHTML = `<span class="spinner"></span>`;
+            brainstormButton.disabled = true;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -524,30 +608,23 @@
                 return null;
             } catch (error) {
                 console.error('Error calling Gemini API:', error);
+                showCustomAlert("Failed to brainstorm subtasks. Please check your API key and try again.");
                 return null;
+            } finally {
+                brainstormButton.innerHTML = `Brainstorm`;
+                brainstormButton.disabled = false;
             }
         }
 
         async function handleBrainstormClick(index, button) {
             const originalTask = tasks[index];
-            button.innerHTML = `<span class="spinner"></span>`;
-            button.disabled = true;
-
-            const subtasks = await brainstormSubtasks(originalTask.text);
-
-            button.innerHTML = `Brainstorm`;
-            button.disabled = false;
+            const subtasks = await brainstormSubtasks(originalTask.text, button);
 
             if (subtasks && subtasks.length > 0) {
                 tasks[index].subtasks = subtasks;
                 tasks[index].isExpanded = true;
                 saveTasks();
                 renderTasks();
-            } else {
-                const failedButton = document.createElement('button');
-                failedButton.textContent = 'Failed to brainstorm. Try again?';
-                failedButton.className = 'p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-200';
-                failedButton.addEventListener('click', () => handleBrainstormClick(index, button));
             }
         }
 
@@ -574,6 +651,8 @@
 
         function renderTasks() {
             taskList.innerHTML = '';
+            const hasApiKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
+
             tasks.forEach((task, index) => {
                 const listItem = document.createElement('li');
                 listItem.className = `p-4 bg-gray-50 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 animate-slideIn`;
@@ -616,7 +695,7 @@
                     dueDateSpan.className = 'text-sm text-gray-500 px-3 py-1 bg-gray-200 rounded-full font-medium';
                 }
 
-                if (!task.subtasks || task.subtasks.length === 0) {
+                if (hasApiKey) {
                     const brainstormButton = document.createElement('button');
                     brainstormButton.className = 'p-2 text-sm bg-purple-500 text-white rounded-full hover:bg-purple-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400';
                     brainstormButton.textContent = 'Brainstorm';
@@ -832,6 +911,18 @@
             }
         });
 
+        // Save API Key
+        saveApiKeyButton.addEventListener('click', () => {
+            const newKey = apiKeyInput.value.trim();
+            if (newKey) {
+                localStorage.setItem(API_KEY_STORAGE_KEY, newKey);
+                showCustomAlert("API Key saved successfully! AI features are now enabled.");
+                renderTasks(); // Re-render to show brainstorm buttons
+            } else {
+                showCustomAlert("Please enter a valid API key.");
+            }
+        });
+
         // Delete All Data
         let deleteConfirmTimeout;
         deleteAllDataButton.addEventListener('click', () => {
@@ -885,6 +976,11 @@
         };
 
         function openGeminiModal() {
+            const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            if (!apiKey) {
+                showCustomAlert("Please go to **Settings > AI Features** to import your API key to enable this feature.");
+                return;
+            }
             geminiContent.classList.remove('hidden');
         }
 
@@ -971,11 +1067,13 @@
         }
         geminiHeader.addEventListener('dblclick', toggleGeminiSize);
 
-
         // Function to send a message to the Gemini API
         async function sendMessageToGemini(prompt) {
-            const apiKey = "AIzaSyBqZ6ANNOOs1rnMiAUp51OPN-MEU1H5c74";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            if (!apiKey) {
+                showCustomAlert("No API key found. Please import your key in Settings to use this feature.");
+                return "Please set your API key in the Settings to enable chat functionality.";
+            }
 
             // Add user message to conversation history
             chatConversation.push({
@@ -984,6 +1082,8 @@
                     text: prompt
                 }]
             });
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             const payload = {
                 contents: chatConversation,
@@ -1066,16 +1166,7 @@
                 chatSendButton.disabled = true;
 
                 try {
-                    // Simulate a math response for demonstration
-                    let geminiResponse;
-                    if (prompt.toLowerCase().includes('quadratic formula')) {
-                        geminiResponse = "The quadratic formula is used to solve quadratic equations of the form $ax^2 + bx + c = 0$. The formula is given by: $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$";
-                    } else if (prompt.toLowerCase().includes('pythagorean theorem')) {
-                        geminiResponse = "The Pythagorean theorem states that in a right-angled triangle, the square of the hypotenuse (the side opposite the right angle) is equal to the sum of the squares of the other two sides. This is expressed as: $a^2 + b^2 = c^2$.";
-                    } else {
-                         geminiResponse = await sendMessageToGemini(prompt);
-                    }
-                    
+                    let geminiResponse = await sendMessageToGemini(prompt);
                     appendMessage('gemini', geminiResponse);
                 } catch (error) {
                     appendMessage('gemini', "An error occurred. Please try again later.");
@@ -1098,6 +1189,16 @@
 
         // Event listener for the "New Chat" button
         newChatButton.addEventListener('click', clearGeminiChat);
+
+        // Custom alert functionality
+        function showCustomAlert(message) {
+            customAlertMessage.innerHTML = message;
+            customAlertModal.classList.remove('hidden');
+        }
+
+        closeAlertButton.addEventListener('click', () => {
+            customAlertModal.classList.add('hidden');
+        });
 
         window.onload = () => {
             loadTasks();
