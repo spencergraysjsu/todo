@@ -475,7 +475,7 @@
             const systemPrompt = "You are a world-class project manager. Your goal is to take a high-level task and break it down into 5 to 7 smaller, actionable subtasks. Do not provide any introduction or conclusion, just the JSON array of strings.";
             const userQuery = `Break down the task "${taskText}" into a list of actionable subtasks.`;
 
-            const apiKey = "";
+            const apiKey = "AIzaSyBqZ6ANNOOs1rnMiAUp51OPN-MEU1H5c74";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             const payload = {
@@ -910,7 +910,7 @@
         });
 
         document.addEventListener('mouseup', () => {
-            isDraggingGemini = false;
+            isResizing = false;
         });
 
         // Resizable functionality for Gemini modal
@@ -974,7 +974,7 @@
 
         // Function to send a message to the Gemini API
         async function sendMessageToGemini(prompt) {
-            const apiKey = "";
+            const apiKey = "AIzaSyBqZ6ANNOOs1rnMiAUp51OPN-MEU1H5c74";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             // Add user message to conversation history
