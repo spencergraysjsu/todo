@@ -221,12 +221,81 @@
             cursor: nwse-resize;
             border-bottom-right-radius: 1rem;
         }
+
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Particles Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Places it behind all content */
+        }
+
+        .floating-logo {
+            position: fixed;
+            z-index: -1;
+            width: 150px; /* Fixed size for the logo */
+            height: 150px;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-    <div class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-2xl">
+    <canvas id="particles-canvas"></canvas>
+    <img id="floating-logo" class="floating-logo hidden" src="" alt="Floating Logo">
+
+    <div class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-2xl z-10">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">My To-Do List</h1>
@@ -308,21 +377,59 @@
         </div>
 
         <div id="dropdowns-container" class="space-y-4">
-            <!-- Dark Mode Dropdown -->
-            <div class="settings-dropdown border-b border-gray-200 pb-2">
+            <!-- Style Dropdown -->
+            <div id="style-dropdown-container" class="settings-dropdown border-b border-gray-200 pb-2">
                 <button
                     class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
-                    <h3 class="text-lg font-semibold">Dark Mode</h3>
+                    <h3 class="text-lg font-semibold">Style</h3>
                     <svg class="h-6 w-6 transform transition-transform duration-200" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
                 <div class="dropdown-content">
-                    <button id="dark-mode-toggle"
-                        class="w-full px-4 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all duration-200">
-                        Toggle Dark Mode
-                    </button>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-gray-600">Particle Background</span>
+                        <label class="switch">
+                            <input type="checkbox" id="particles-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Logo Dropdown -->
+                    <div class="settings-dropdown mt-4 pl-4 border-t border-gray-200 pt-4">
+                        <button id="logo-dropdown-header"
+                            class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                            <h4 class="text-base font-semibold">Logo</h4>
+                            <svg class="h-5 w-5 transform transition-transform duration-200" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Floating Logo</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="logo-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="mt-4">
+                                <input type="text" id="logo-url-input" placeholder="Enter image URL..."
+                                    class="w-full p-2 text-sm border-2 border-gray-300 rounded-lg animated-input">
+                                <button id="save-logo-url" class="w-full mt-2 px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all duration-200">
+                                    Save Logo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -362,6 +469,13 @@
                         device.</p>
                     <textarea id="export-data" readonly
                         class="w-full h-24 p-2 text-sm border-2 border-gray-300 rounded-xl bg-gray-50 focus:outline-none resize-none"></textarea>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-gray-600">Include API Key</span>
+                        <label class="switch">
+                            <input type="checkbox" id="include-api-key-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                     <button id="copy-export-data"
                         class="w-full mt-2 px-4 py-3 rounded-full bg-green-500 text-white font-semibold hover:bg-green-600 transition-all duration-200">
                         Copy to Clipboard
@@ -467,6 +581,10 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const STORAGE_KEY = `todo-app-${appId}`;
         const API_KEY_STORAGE_KEY = 'gemini-api-key';
+        const THEME_STORAGE_KEY = 'theme';
+        const PARTICLES_STORAGE_KEY = 'particles-enabled';
+        const LOGO_ENABLED_STORAGE_KEY = 'logo-enabled';
+        const LOGO_URL_STORAGE_KEY = 'logo-url';
 
         const taskForm = document.getElementById('task-form');
         const taskInput = document.getElementById('task-input');
@@ -480,12 +598,20 @@
         const settingsContent = document.getElementById('settings-content');
         const closeSettingsButton = document.getElementById('close-settings');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const particlesToggle = document.getElementById('particles-toggle');
         const deleteAllDataButton = document.getElementById('delete-all-data');
         const exportDataTextarea = document.getElementById('export-data');
         const copyExportDataButton = document.getElementById('copy-export-data');
         const importDataTextarea = document.getElementById('import-data');
         const importButton = document.getElementById('import-button');
         const settingsHeader = document.getElementById('settings-header');
+        const includeApiKeyToggle = document.getElementById('include-api-key-toggle');
+        const floatingLogo = document.getElementById('floating-logo');
+        const logoToggle = document.getElementById('logo-toggle');
+        const logoUrlInput = document.getElementById('logo-url-input');
+        const saveLogoUrlButton = document.getElementById('save-logo-url');
+        const styleDropdownContainer = document.getElementById('style-dropdown-container');
+        const logoDropdownHeader = document.getElementById('logo-dropdown-header');
 
         // New Gemini chat elements
         const geminiButton = document.getElementById('gemini-button');
@@ -505,6 +631,21 @@
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertMessage = document.getElementById('custom-alert-message');
         const closeAlertButton = document.getElementById('close-alert-button');
+
+        // Particles
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let particlesEnabled = false;
+        let animationFrameId = null;
+
+        // Floating logo variables
+        let logoEnabled = false;
+        let logoUrl = '';
+        let logoX = 0;
+        let logoY = 0;
+        let logoSpeedX = 2;
+        let logoSpeedY = 2;
 
         let tasks = [];
         let currentEditIndex = -1;
@@ -532,6 +673,8 @@
             sortTasksByDueDate();
             renderTasks();
             loadTheme();
+            loadParticlesState();
+            loadLogoState();
         }
 
         function sortTasksByDueDate() {
@@ -634,6 +777,23 @@
             renderTasks();
         }
 
+        function addSubtask(parentIndex, subtaskText) {
+            const parentTask = tasks[parentIndex];
+            if (parentTask) {
+                if (!parentTask.subtasks) {
+                    parentTask.subtasks = [];
+                }
+                parentTask.subtasks.push({
+                    text: subtaskText,
+                    completed: false,
+                    dueDate: null,
+                });
+                parentTask.isExpanded = true;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
         function deleteSubtask(parentIndex, subtaskIndex) {
             const parentTask = tasks[parentIndex];
             if (parentTask && parentTask.subtasks) {
@@ -661,7 +821,7 @@
                 taskMainContainer.className = 'flex flex-col md:flex-row items-start md:items-center w-full space-x-3';
 
                 const expandButton = document.createElement('button');
-                expandButton.className = `flex-shrink-0 w-6 h-6 text-gray-500 hover:text-gray-700 focus:outline-none ${task.subtasks && task.subtasks.length > 0 ? '' : 'invisible'}`;
+                expandButton.className = `flex-shrink-0 w-6 h-6 text-gray-500 hover:text-gray-700 focus:outline-none ${task.subtasks && task.subtasks.length > 0 ? '' : ''}`;
                 expandButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 transform ${task.isExpanded ? 'rotate-90' : ''}">
                                              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                           </svg>`;
@@ -679,7 +839,6 @@
 
                 const taskText = document.createElement('span');
                 taskText.textContent = task.text;
-                // Add text-gray-800 to ensure dark mode color consistency
                 taskText.className = `task-list-item-text text-lg font-medium text-gray-800 ${task.completed ? 'completed' : ''}`;
 
                 taskContent.appendChild(checkbox);
@@ -725,9 +884,14 @@
                 taskMainContainer.appendChild(rightContent);
                 listItem.appendChild(taskMainContainer);
 
-                if (task.subtasks && task.isExpanded) {
-                    const subtasksList = document.createElement('ul');
-                    subtasksList.className = 'subtasks-container expanded space-y-2';
+                // Subtask section
+                const subtasksContainer = document.createElement('ul');
+                subtasksContainer.className = `subtasks-container space-y-2`;
+                if (task.isExpanded) {
+                    subtasksContainer.classList.add('expanded');
+                }
+
+                if (task.subtasks) {
                     task.subtasks.forEach((subtask, subtaskIndex) => {
                         const subtaskItem = document.createElement('li');
                         subtaskItem.className = 'flex items-center space-x-2';
@@ -751,11 +915,48 @@
                         subtaskItem.appendChild(subtaskCheckbox);
                         subtaskItem.appendChild(subtaskText);
                         subtaskItem.appendChild(subtaskDeleteButton);
-                        subtasksList.appendChild(subtaskItem);
+                        subtasksContainer.appendChild(subtaskItem);
                     });
-                    listItem.appendChild(subtasksList);
                 }
 
+                // Add subtask form and buttons
+                const addSubtaskForm = document.createElement('form');
+                addSubtaskForm.className = 'flex items-center space-x-2 mt-2';
+                const addSubtaskInput = document.createElement('input');
+                addSubtaskInput.type = 'text';
+                addSubtaskInput.placeholder = 'Add a new subtask...';
+                addSubtaskInput.className = 'animated-input flex-grow p-2 text-sm border-2 border-gray-300 rounded-lg focus:outline-none transition-colors duration-200';
+                
+                const addSubtaskButton = document.createElement('button');
+                addSubtaskButton.type = 'submit';
+                addSubtaskButton.className = 'p-2 bg-blue-500 text-white rounded-xl shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400';
+                addSubtaskButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>`;
+
+                const brainstormSubtaskButton = document.createElement('button');
+                brainstormSubtaskButton.type = 'button';
+                brainstormSubtaskButton.className = 'p-2 bg-purple-500 text-white rounded-xl shadow-lg hover:bg-purple-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400';
+                brainstormSubtaskButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zM9.5 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM14.5 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM12 18a4 4 0 100-8 4 4 0 000 8z" /></svg>`;
+                brainstormSubtaskButton.addEventListener('click', () => handleBrainstormClick(index, brainstormSubtaskButton));
+
+                addSubtaskForm.appendChild(addSubtaskInput);
+                addSubtaskForm.appendChild(addSubtaskButton);
+                if (hasApiKey) {
+                    addSubtaskForm.appendChild(brainstormSubtaskButton);
+                }
+
+                addSubtaskForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const subtaskText = addSubtaskInput.value.trim();
+                    if (subtaskText) {
+                        addSubtask(index, subtaskText);
+                        addSubtaskInput.value = '';
+                    }
+                });
+
+                subtasksContainer.appendChild(addSubtaskForm);
+                listItem.appendChild(subtasksContainer);
                 taskList.appendChild(listItem);
             });
         }
@@ -775,7 +976,7 @@
                     completed: false,
                     dueDate: null,
                     subtasks: [],
-                    isExpanded: false
+                    isExpanded: true
                 };
                 tasks.push(newTask);
                 taskInput.value = '';
@@ -844,7 +1045,11 @@
 
         function openSettingsModal() {
             settingsContent.classList.remove('hidden');
-            exportDataTextarea.value = btoa(JSON.stringify(tasks));
+            const exportedData = {
+                tasks: tasks,
+                apiKey: includeApiKeyToggle.checked ? localStorage.getItem(API_KEY_STORAGE_KEY) : undefined
+            };
+            exportDataTextarea.value = btoa(JSON.stringify(exportedData));
         }
 
         function closeSettingsModal() {
@@ -875,15 +1080,38 @@
         // Dropdown logic
         const dropdownHeaders = document.querySelectorAll('.dropdown-header');
         dropdownHeaders.forEach(header => {
-            header.addEventListener('click', (e) => {
+            header.addEventListener('click', () => {
                 const clickedContent = header.nextElementSibling;
                 const clickedIcon = header.querySelector('svg');
+                const isLogoDropdownHeader = header.id === 'logo-dropdown-header';
+                
+                // Close other top-level dropdowns, with the exception for the Style dropdown's child.
+                document.querySelectorAll('.settings-dropdown > .dropdown-header').forEach(otherHeader => {
+                    const otherContent = otherHeader.nextElementSibling;
+                    const otherIcon = otherHeader.querySelector('svg');
+                    const isOtherStyleDropdown = otherHeader.closest('#style-dropdown-container');
 
-                // Close all other dropdowns
-                document.querySelectorAll('.dropdown-content').forEach(content => {
-                    if (content !== clickedContent && content.classList.contains('open')) {
-                        content.classList.remove('open');
-                        content.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                    // Do not close the Style or Logo dropdown if a header within the Style dropdown is clicked
+                    if (isLogoDropdownHeader && isOtherStyleDropdown) {
+                        return;
+                    }
+
+                    // If a non-Style dropdown is clicked, close both Style and Logo
+                    if (!isLogoDropdownHeader && !isOtherStyleDropdown && otherHeader.id !== header.id) {
+                        const styleContent = styleDropdownContainer.querySelector('.dropdown-content');
+                        const styleIcon = styleDropdownContainer.querySelector('.dropdown-header svg');
+                        styleContent.classList.remove('open');
+                        styleIcon.classList.remove('rotate-180');
+                        
+                        const logoContent = logoDropdownHeader.nextElementSibling;
+                        const logoIcon = logoDropdownHeader.querySelector('svg');
+                        logoContent.classList.remove('open');
+                        logoIcon.classList.remove('rotate-180');
+                    }
+
+                    if (otherContent.classList.contains('open') && otherHeader.id !== header.id) {
+                        otherContent.classList.remove('open');
+                        otherIcon.classList.remove('rotate-180');
                     }
                 });
 
@@ -895,22 +1123,183 @@
 
         // Dark mode toggle
         function loadTheme() {
-            const storedTheme = localStorage.getItem('theme');
+            const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
             if (storedTheme === 'dark') {
                 document.documentElement.classList.add('dark');
+                darkModeToggle.checked = true;
             } else {
                 document.documentElement.classList.remove('dark');
+                darkModeToggle.checked = false;
             }
         }
 
-        darkModeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem(THEME_STORAGE_KEY, 'dark');
             } else {
-                localStorage.setItem('theme', 'light');
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem(THEME_STORAGE_KEY, 'light');
             }
         });
+
+        // Floating logo functionality
+        function loadLogoState() {
+            logoEnabled = localStorage.getItem(LOGO_ENABLED_STORAGE_KEY) === 'true';
+            logoUrl = localStorage.getItem(LOGO_URL_STORAGE_KEY) || '';
+            logoToggle.checked = logoEnabled;
+            logoUrlInput.value = logoUrl;
+            if (logoEnabled && logoUrl) {
+                floatingLogo.src = logoUrl;
+                floatingLogo.classList.remove('hidden');
+                logoX = Math.random() * (window.innerWidth - floatingLogo.offsetWidth);
+                logoY = Math.random() * (window.innerHeight - floatingLogo.offsetHeight);
+            } else {
+                floatingLogo.classList.add('hidden');
+            }
+        }
+
+        function updateLogo() {
+            logoEnabled = localStorage.getItem(LOGO_ENABLED_STORAGE_KEY) === 'true';
+            logoUrl = localStorage.getItem(LOGO_URL_STORAGE_KEY) || '';
+            logoToggle.checked = logoEnabled;
+            logoUrlInput.value = logoUrl;
+
+            if (logoEnabled && logoUrl) {
+                floatingLogo.src = logoUrl;
+                floatingLogo.classList.remove('hidden');
+                if (!animationFrameId) {
+                    animateBackground();
+                }
+            } else {
+                floatingLogo.classList.add('hidden');
+            }
+        }
+
+        logoToggle.addEventListener('change', () => {
+            localStorage.setItem(LOGO_ENABLED_STORAGE_KEY, logoToggle.checked);
+            updateLogo();
+        });
+
+        saveLogoUrlButton.addEventListener('click', () => {
+            localStorage.setItem(LOGO_URL_STORAGE_KEY, logoUrlInput.value.trim());
+            updateLogo();
+        });
+
+        function animateBackground() {
+            // Update particle positions
+            if (particlesEnabled) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                connectParticles();
+            }
+
+            // Update logo position
+            if (logoEnabled && floatingLogo.src) {
+                logoX += logoSpeedX;
+                logoY += logoSpeedY;
+
+                const logoWidth = floatingLogo.offsetWidth;
+                const logoHeight = floatingLogo.offsetHeight;
+
+                // Bounce off walls
+                if (logoX + logoWidth > window.innerWidth || logoX < 0) {
+                    logoSpeedX *= -1;
+                }
+                if (logoY + logoHeight > window.innerHeight || logoY < 0) {
+                    logoSpeedY *= -1;
+                }
+
+                floatingLogo.style.left = logoX + 'px';
+                floatingLogo.style.top = logoY + 'px';
+            }
+            
+            animationFrameId = requestAnimationFrame(animateBackground);
+        }
+
+        // Particles Logic
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(150, 150, 150, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            const numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const distance = Math.sqrt(Math.pow(particles[a].x - particles[b].x, 2) + Math.pow(particles[a].y - particles[b].y, 2));
+                    if (distance < 100) {
+                        opacityValue = 1 - (distance / 100);
+                        ctx.strokeStyle = `rgba(150, 150, 150, ${opacityValue})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createParticles();
+        }
+
+        function loadParticlesState() {
+            particlesEnabled = localStorage.getItem(PARTICLES_STORAGE_KEY) === 'true';
+            particlesToggle.checked = particlesEnabled;
+        }
+
+        particlesToggle.addEventListener('change', () => {
+            particlesEnabled = particlesToggle.checked;
+            localStorage.setItem(PARTICLES_STORAGE_KEY, particlesEnabled);
+            if (particlesEnabled) {
+                resizeCanvas();
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if (logoEnabled && floatingLogo.src) {
+                 // Reset logo position to prevent it from going off-screen
+                logoX = Math.random() * (window.innerWidth - floatingLogo.offsetWidth);
+                logoY = Math.random() * (window.innerHeight - floatingLogo.offsetHeight);
+            }
+        });
+
 
         // Save API Key
         saveApiKeyButton.addEventListener('click', () => {
@@ -937,6 +1326,8 @@
             } else {
                 clearTimeout(deleteConfirmTimeout);
                 tasks = [];
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(API_KEY_STORAGE_KEY);
                 saveTasks();
                 renderTasks();
                 closeSettingsModal();
@@ -947,6 +1338,12 @@
 
         // Export data
         copyExportDataButton.addEventListener('click', () => {
+            const exportedData = {
+                tasks: tasks,
+                apiKey: includeApiKeyToggle.checked ? localStorage.getItem(API_KEY_STORAGE_KEY) : undefined
+            };
+            const dataToCopy = btoa(JSON.stringify(exportedData));
+            exportDataTextarea.value = dataToCopy;
             exportDataTextarea.select();
             document.execCommand('copy');
         });
@@ -955,17 +1352,29 @@
         importButton.addEventListener('click', () => {
             try {
                 const importedData = JSON.parse(atob(importDataTextarea.value));
-                if (Array.isArray(importedData)) {
+                if (Array.isArray(importedData)) { // Old format, only tasks
                     tasks = importedData;
-                    sortTasksByDueDate();
-                    saveTasks();
-                    renderTasks();
-                    closeSettingsModal();
+                    localStorage.removeItem(API_KEY_STORAGE_KEY);
+                    showCustomAlert("Data imported successfully! No API Key was found in the data, so you may need to add it again.");
+                } else if (typeof importedData === 'object' && importedData.tasks) {
+                    tasks = importedData.tasks;
+                    if (importedData.apiKey) {
+                        localStorage.setItem(API_KEY_STORAGE_KEY, importedData.apiKey);
+                        showCustomAlert("Data imported successfully, and API Key applied!");
+                    } else {
+                        localStorage.removeItem(API_KEY_STORAGE_KEY);
+                        showCustomAlert("Data imported successfully! No API Key was found in the data, so you may need to add it again.");
+                    }
                 } else {
-                    console.error('Import failed: Invalid data format.');
+                    throw new Error('Invalid data format.');
                 }
+                sortTasksByDueDate();
+                saveTasks();
+                renderTasks();
+                closeSettingsModal();
             } catch (e) {
                 console.error('Import failed:', e);
+                showCustomAlert("Import failed: Invalid data format.");
             }
         });
 
@@ -1154,11 +1563,12 @@
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
             if (sender === 'gemini') {
+                // Wait for a moment to ensure MathJax has loaded and is ready to process the content.
                 setTimeout(() => {
-                    if (typeof MathJax !== 'undefined') {
+                    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
                         MathJax.typesetPromise([messageDiv]);
                     }
-                }, 100);
+                }, 200);
             }
         }
 
@@ -1192,7 +1602,7 @@
         function clearGeminiChat() {
             chatConversation = [];
             chatHistory.innerHTML = '';
-            appendMessage('gemini', "Whats up Dumb Bitch... What u need??");
+            appendMessage('gemini', "Stupid Bitch... Tf u need now??");
         }
 
         // Event listener for the "New Chat" button
@@ -1211,6 +1621,7 @@
         window.onload = () => {
             loadTasks();
             clearGeminiChat();
+            animateBackground(); // Start the combined animation loop
         };
     </script>
 </body>
