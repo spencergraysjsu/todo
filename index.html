@@ -32,6 +32,11 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        
+        #main-container.calendar-view {
+            max-width: 90vw;
+        }
+
 
         /* Dark mode styles */
         .dark body,
@@ -48,11 +53,16 @@
         }
 
         .dark .text-gray-500,
-        .dark .text-gray-700 {
+        .dark .text-gray-700,
+        .dark .text-gray-600 {
             color: #a0aec0;
         }
 
         .dark .border-gray-300 {
+            border-color: #4a5568;
+        }
+        
+        .dark .border-gray-200 {
             border-color: #4a5568;
         }
 
@@ -288,6 +298,204 @@
             object-fit: contain;
             transition: opacity 0.3s ease;
         }
+
+        /* NEW CALENDAR AND TABS STYLES */
+        .tabs-container {
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+        .dark .tabs-container {
+            border-bottom-color: #4a5568;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+        .dark .tab-button {
+            color: #a0aec0;
+        }
+
+        .tab-button.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        .dark .tab-button.active {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
+        }
+
+        .calendar-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .calendar-header-cell,
+        .calendar-day-cell {
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            flex: 1 1 calc(100% / 7 - 4px);
+            min-width: 120px;
+        }
+        
+        .calendar-header-cell {
+            font-weight: 700;
+            color: #4b5563;
+        }
+        .dark .calendar-header-cell {
+            color: #cbd5e0;
+        }
+
+        .calendar-day-cell {
+            min-height: 100px;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+        .dark .calendar-day-cell {
+            background-color: #4a5568;
+            border-color: #718096;
+        }
+
+        .calendar-day-cell.is-today {
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+        }
+        .dark .calendar-day-cell.is-today {
+            background-color: #2b6cb0;
+            border-color: #4299e1;
+        }
+        
+        .calendar-day-cell.is-other-month .day-number {
+             color: #d1d5db;
+        }
+        .dark .calendar-day-cell.is-other-month .day-number {
+             color: #718096;
+        }
+
+        .day-number {
+            font-weight: 600;
+        }
+        
+        .calendar-task, .calendar-event {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            margin-top: 4px;
+            border-radius: 9999px;
+            color: white;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .calendar-task {
+            background-color: #3b82f6;
+        }
+        
+        .calendar-task.completed {
+            background-color: #6b7280;
+            text-decoration: line-through;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .color-option {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: #3b82f6;
+        }
+        
+        .bg-red-500 { background-color: #ef4444; }
+        .bg-blue-500 { background-color: #3b82f6; }
+        .bg-green-500 { background-color: #22c55e; }
+        .bg-yellow-500 { background-color: #eab308; }
+        .bg-purple-500 { background-color: #8b5cf6; }
+
+        .complete-tasks-container {
+            margin-top: 2rem;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 1.5rem;
+        }
+        .dark .complete-tasks-container {
+            border-top-color: #4a5568;
+        }
+        
+        /* Clock styles */
+        #live-clock {
+            position: fixed;
+            top: 20px;
+            left: calc(100vw - 200px); /* Initial position */
+            width: auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+
+        .dark #live-clock {
+             background-color: rgba(45, 55, 72, 0.8);
+        }
+        #digital-clock {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #374151;
+        }
+        .dark #digital-clock {
+            color: #e2e8f0;
+        }
+        #analog-clock {
+            width: 150px;
+            height: 150px;
+            border: 5px solid #374151;
+            border-radius: 50%;
+            position: relative;
+        }
+        .dark #analog-clock {
+            border-color: #e2e8f0;
+        }
+        .hand {
+            position: absolute;
+            background-color: #374151;
+            transform-origin: bottom;
+            border-radius: 2px;
+            left: 50%;
+            bottom: 50%;
+        }
+         .dark .hand {
+            background-color: #e2e8f0;
+        }
+        #hour-hand {
+            width: 4px;
+            height: 40px;
+        }
+        #minute-hand {
+            width: 3px;
+            height: 60px;
+        }
+        #second-hand {
+            width: 2px;
+            height: 70px;
+            background-color: #ef4444;
+        }
+
     </style>
 </head>
 
@@ -295,11 +503,20 @@
 
     <canvas id="particles-canvas"></canvas>
     <img id="floating-logo" class="floating-logo hidden" src="" alt="Floating Logo">
+    
+    <div id="live-clock" class="hidden">
+        <div id="clock-drag-handle" class="drag-handle text-center text-gray-500 cursor-move mb-2">::</div>
+        <div id="digital-clock"></div>
+        <div id="analog-clock" class="hidden">
+            <div id="hour-hand" class="hand"></div>
+            <div id="minute-hand" class="hand"></div>
+            <div id="second-hand" class="hand"></div>
+        </div>
+    </div>
 
-    <div class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-2xl z-10">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">My To-Do List</h1>
+    <div id="main-container" class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-4xl z-10">
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">My Productivity Hub</h1>
             <div class="flex items-center space-x-2">
                 <button id="gemini-button"
                     class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -320,38 +537,65 @@
             </div>
         </div>
 
-        <!-- Add Task Form -->
-        <form id="task-form" class="mb-6 flex items-center space-x-2">
-            <input type="text" id="task-input" placeholder="Add a new task..." required
-                class="animated-input flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none transition-colors duration-200">
-            <button type="submit"
-                class="bg-blue-500 text-white p-3 rounded-xl shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-            </button>
-        </form>
+        <div class="tabs-container flex">
+            <button id="todo-tab-button" class="tab-button active">To-Do List</button>
+            <button id="calendar-tab-button" class="tab-button">Calendar</button>
+        </div>
 
-        <!-- Task List -->
-        <ul id="task-list" class="space-y-4">
-            <!-- Tasks will be rendered here by JavaScript -->
-        </ul>
+        <div id="todo-panel">
+            <form id="task-form" class="mb-6 flex items-center space-x-2">
+                <input type="text" id="task-input" placeholder="Add a new task..." required
+                    class="animated-input flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none transition-colors duration-200">
+                <button type="submit"
+                    class="bg-blue-500 text-white p-3 rounded-xl shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
+            </form>
+
+            <ul id="task-list" class="space-y-4">
+                </ul>
+            
+            <div id="complete-tasks" class="complete-tasks-container hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Completed</h2>
+                <ul id="completed-task-list" class="space-y-4">
+                    </ul>
+            </div>
+        </div>
+        
+        <div id="calendar-panel" class="hidden">
+            <div class="flex items-center justify-between mb-4">
+                 <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <h2 id="calendar-month-year" class="text-xl font-bold text-gray-800"></h2>
+                 <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+            <div id="calendar-grid" class="calendar-grid">
+                </div>
+        </div>
     </div>
 
-    <!-- Edit Task Modal (hidden by default) -->
-    <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div id="edit-task-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">Edit Task</h2>
-            <form id="edit-form" class="space-y-4">
-                <label for="edit-text" class="block text-sm font-medium text-gray-700">Task Name</label>
-                <input type="text" id="edit-text" required
-                    class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
-                <label for="edit-date" class="block text-sm font-medium text-gray-700">Due Date</label>
-                <input type="date" id="edit-date"
-                    class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
+            <form id="edit-task-form" class="space-y-4">
+                <div>
+                    <label for="edit-task-text" class="block text-sm font-medium text-gray-700">Task Name</label>
+                    <input type="text" id="edit-task-text" required
+                        class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
+                </div>
+                <div>
+                    <label for="edit-task-date" class="block text-sm font-medium text-gray-700">Due Date</label>
+                    <input type="date" id="edit-task-date"
+                        class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
+                </div>
                 <div class="flex justify-end space-x-3 mt-4">
-                    <button type="button" id="cancel-edit"
+                    <button type="button" id="cancel-edit-task"
                         class="px-4 py-2 text-gray-600 font-semibold rounded-full hover:bg-gray-200 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Cancel
                     </button>
@@ -364,7 +608,71 @@
         </div>
     </div>
 
-    <!-- Settings Modal (hidden by default) -->
+
+    <div id="calendar-item-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+        <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
+            <h2 id="calendar-item-title" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+            <div class="flex justify-end space-x-3 mt-4">
+                <button type="button" id="delete-calendar-item"
+                    class="px-4 py-2 bg-red-500 text-white font-semibold rounded-full shadow-lg hover:bg-red-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400">
+                    Delete
+                </button>
+                <button type="button" id="cancel-calendar-item"
+                    class="px-4 py-2 text-gray-600 font-semibold rounded-full hover:bg-gray-200 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="add-item-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+        <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Add New Item</h2>
+            <form id="add-item-form" class="space-y-4">
+                <div>
+                    <label for="item-type" class="block text-sm font-medium text-gray-700">Type</label>
+                    <select id="item-type"
+                        class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
+                        <option value="task">Task</option>
+                        <option value="event">Event</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="item-text" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" id="item-text" required
+                        class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
+                </div>
+                <div id="event-time-picker" class="hidden">
+                     <label for="item-time" class="block text-sm font-medium text-gray-700">Time (Optional)</label>
+                    <input type="time" id="item-time" class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input">
+                </div>
+                <div id="event-color-picker" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700">Color</label>
+                    <div class="color-picker">
+                        <div class="color-option bg-red-500 selected" data-color="red-500"></div>
+                        <div class="color-option bg-blue-500" data-color="blue-500"></div>
+                        <div class="color-option bg-green-500" data-color="green-500"></div>
+                        <div class="color-option bg-yellow-500" data-color="yellow-500"></div>
+                        <div class="color-option bg-purple-500" data-color="purple-500"></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-4">
+                    <button type="button" id="cancel-add-item"
+                        class="px-4 py-2 text-gray-600 font-semibold rounded-full hover:bg-gray-200 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-lg hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     <div id="settings-content" class="hidden bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
         <div id="settings-header" class="drag-handle flex items-center justify-between mb-4">
             <h2 class="text-2xl font-semibold text-gray-800">Settings</h2>
@@ -378,7 +686,6 @@
         </div>
 
         <div id="dropdowns-container" class="space-y-4">
-            <!-- Style Dropdown -->
             <div id="style-dropdown-container" class="settings-dropdown border-b border-gray-200 pb-2">
                 <button
                     class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -404,7 +711,6 @@
                         </label>
                     </div>
 
-                    <!-- Logo Dropdown -->
                     <div class="settings-dropdown mt-4 pl-4 border-t border-gray-200 pt-4">
                         <button id="logo-dropdown-header"
                             class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -432,10 +738,37 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="settings-dropdown mt-4 pl-4 border-t border-gray-200 pt-4">
+                        <button id="clock-dropdown-header"
+                            class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                            <h4 class="text-base font-semibold">Clock</h4>
+                            <svg class="h-5 w-5 transform transition-transform duration-200" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Show Clock</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="clock-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="mt-4">
+                                <label for="clock-style-select" class="block text-sm font-medium text-gray-700">Clock Style</label>
+                                <select id="clock-style-select" class="w-full p-2 text-sm border-2 border-gray-300 rounded-lg animated-input">
+                                    <option value="digital">Digital</option>
+                                    <option value="analog">Analog</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <!-- API Key Dropdown -->
             <div class="settings-dropdown border-b border-gray-200 pb-2">
                 <button
                     class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -457,7 +790,6 @@
                 </div>
             </div>
 
-            <!-- Export Data Dropdown -->
             <div class="settings-dropdown border-b border-gray-200 pb-2">
                 <button
                     class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -486,7 +818,6 @@
                 </div>
             </div>
 
-            <!-- Import Data Dropdown -->
             <div class="settings-dropdown border-b border-gray-200 pb-2">
                 <button
                     class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -507,7 +838,6 @@
                 </div>
             </div>
 
-            <!-- Delete All Data Dropdown -->
             <div class="settings-dropdown">
                 <button
                     class="dropdown-header w-full flex justify-between items-center py-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -527,7 +857,6 @@
         </div>
     </div>
 
-    <!-- Gemini Chat Modal (hidden by default) -->
     <div id="gemini-content"
         class="hidden bg-white p-6 rounded-3xl shadow-xl flex flex-col modal-content"
         style="width: 500px; min-width: 300px; height: 500px; min-height: 300px;">
@@ -548,8 +877,7 @@
             </div>
         </div>
         <div id="chat-history" class="chat-container flex-grow">
-            <!-- Chat messages will be appended here -->
-        </div>
+            </div>
         <form id="chat-form" class="flex items-center space-x-2">
             <input type="text" id="chat-input" placeholder="Ask me anything..."
                 class="animated-input flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none transition-colors duration-200">
@@ -565,7 +893,6 @@
         <div class="resize-handle"></div>
     </div>
 
-    <!-- Custom Alert Modal -->
     <div id="custom-alert-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm modal-content">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">API Key Required</h2>
@@ -589,15 +916,30 @@
         const PARTICLES_STORAGE_KEY = 'particles-enabled';
         const LOGO_ENABLED_STORAGE_KEY = 'logo-enabled';
         const LOGO_URL_STORAGE_KEY = 'logo-url';
+        const EVENTS_STORAGE_KEY = 'events-app';
+        const CLOCK_ENABLED_STORAGE_KEY = 'clock-enabled';
+        const CLOCK_STYLE_STORAGE_KEY = 'clock-style';
+        const CLOCK_POSITION_STORAGE_KEY = 'clock-position';
+
+        const mainContainer = document.getElementById('main-container');
 
         const taskForm = document.getElementById('task-form');
         const taskInput = document.getElementById('task-input');
         const taskList = document.getElementById('task-list');
-        const editModal = document.getElementById('edit-modal');
-        const editForm = document.getElementById('edit-form');
-        const editText = document.getElementById('edit-text');
-        const editDate = document.getElementById('edit-date');
-        const cancelEditButton = document.getElementById('cancel-edit');
+        const completedTaskList = document.getElementById('completed-task-list');
+        const completeTasksContainer = document.getElementById('complete-tasks');
+        
+        const editTaskModal = document.getElementById('edit-task-modal');
+        const editTaskForm = document.getElementById('edit-task-form');
+        const editTaskText = document.getElementById('edit-task-text');
+        const editTaskDate = document.getElementById('edit-task-date');
+        const cancelEditTaskButton = document.getElementById('cancel-edit-task');
+        
+        const calendarItemModal = document.getElementById('calendar-item-modal');
+        const calendarItemTitle = document.getElementById('calendar-item-title');
+        const deleteCalendarItemButton = document.getElementById('delete-calendar-item');
+        const cancelCalendarItemButton = document.getElementById('cancel-calendar-item');
+
         const settingsButton = document.getElementById('settings-button');
         const settingsContent = document.getElementById('settings-content');
         const closeSettingsButton = document.getElementById('close-settings');
@@ -614,6 +956,24 @@
         const logoToggle = document.getElementById('logo-toggle');
         const logoUrlInput = document.getElementById('logo-url-input');
         const saveLogoUrlButton = document.getElementById('save-logo-url');
+        const addItemModal = document.getElementById('add-item-modal');
+        const addItemForm = document.getElementById('add-item-form');
+        const itemTypeSelect = document.getElementById('item-type');
+        const itemTextInput = document.getElementById('item-text');
+        const itemTimeInput = document.getElementById('item-time');
+        const eventTimePicker = document.getElementById('event-time-picker');
+        const eventColorPicker = document.getElementById('event-color-picker');
+        const cancelAddItemButton = document.getElementById('cancel-add-item');
+
+        const liveClock = document.getElementById('live-clock');
+        const clockDragHandle = document.getElementById('clock-drag-handle');
+        const digitalClock = document.getElementById('digital-clock');
+        const analogClock = document.getElementById('analog-clock');
+        const hourHand = document.getElementById('hour-hand');
+        const minuteHand = document.getElementById('minute-hand');
+        const secondHand = document.getElementById('second-hand');
+        const clockToggle = document.getElementById('clock-toggle');
+        const clockStyleSelect = document.getElementById('clock-style-select');
 
         // New Gemini chat elements
         const geminiButton = document.getElementById('gemini-button');
@@ -633,6 +993,16 @@
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertMessage = document.getElementById('custom-alert-message');
         const closeAlertButton = document.getElementById('close-alert-button');
+        
+        // NEW CALENDAR AND TABS ELEMENTS
+        const todoTabButton = document.getElementById('todo-tab-button');
+        const calendarTabButton = document.getElementById('calendar-tab-button');
+        const todoPanel = document.getElementById('todo-panel');
+        const calendarPanel = document.getElementById('calendar-panel');
+        const calendarMonthYear = document.getElementById('calendar-month-year');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
 
         // Particles
         const canvas = document.getElementById('particles-canvas');
@@ -650,9 +1020,20 @@
         let logoSpeedY = 2;
 
         let tasks = [];
+        let events = [];
         let currentEditIndex = -1;
         let chatConversation = [];
         let originalGeminiState = null;
+        let currentAddItemDate = null;
+        let itemToDelete = null;
+        
+        // Calendar state
+        let calendarDate = new Date();
+        
+        function saveAllData() {
+            saveTasks();
+            saveEvents();
+        }
 
         function saveTasks() {
             try {
@@ -660,6 +1041,20 @@
             } catch (e) {
                 console.error('Error saving to local storage:', e);
             }
+        }
+        
+        function saveEvents() {
+            try {
+                localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(events));
+            } catch (e) {
+                console.error('Error saving events to local storage:', e);
+            }
+        }
+        
+        function loadAllData() {
+            loadTasks();
+            loadEvents();
+            renderApp();
         }
 
         function loadTasks() {
@@ -673,10 +1068,18 @@
                 tasks = [];
             }
             sortTasksByDueDate();
-            renderTasks();
-            loadTheme();
-            loadParticlesState();
-            loadLogoState();
+        }
+        
+        function loadEvents() {
+            try {
+                const storedEvents = localStorage.getItem(EVENTS_STORAGE_KEY);
+                if (storedEvents) {
+                    events = JSON.parse(storedEvents);
+                }
+            } catch (e) {
+                console.error('Error loading events from local storage:', e);
+                events = [];
+            }
         }
 
         function sortTasksByDueDate() {
@@ -690,6 +1093,12 @@
 
                 return dateA - dateB;
             });
+        }
+        
+        // NEW: Central render function
+        function renderApp() {
+            renderTasks();
+            renderCalendar();
         }
 
         async function brainstormSubtasks(taskText, brainstormButton) {
@@ -769,14 +1178,14 @@
                 tasks[index].subtasks = subtasks;
                 tasks[index].isExpanded = true;
                 saveTasks();
-                renderTasks();
+                renderApp();
             }
         }
 
         function toggleSubtasks(index) {
             tasks[index].isExpanded = !tasks[index].isExpanded;
             saveTasks();
-            renderTasks();
+            renderApp();
         }
 
         function addSubtask(parentIndex, subtaskText) {
@@ -792,7 +1201,7 @@
                 });
                 parentTask.isExpanded = true;
                 saveTasks();
-                renderTasks();
+                renderApp();
             }
         }
 
@@ -807,13 +1216,16 @@
                 }
 
                 saveTasks();
-                renderTasks();
+                renderApp();
             }
         }
 
         function renderTasks() {
             taskList.innerHTML = '';
+            completedTaskList.innerHTML = '';
+            
             const hasApiKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
+            let hasCompletedTasks = false;
 
             tasks.forEach((task, index) => {
                 const listItem = document.createElement('li');
@@ -853,7 +1265,9 @@
                 const dueDateSpan = document.createElement('span');
                 if (task.dueDate) {
                     const date = new Date(task.dueDate);
-                    dueDateSpan.textContent = `Due: ${date.toLocaleDateString()}`;
+                    // Adjust for timezone offset to display the correct local date
+                    const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+                    dueDateSpan.textContent = `Due: ${adjustedDate.toLocaleDateString()}`;
                     dueDateSpan.className = 'text-sm text-gray-500 px-3 py-1 bg-gray-200 rounded-full font-medium';
                 }
 
@@ -864,13 +1278,13 @@
                     brainstormButton.addEventListener('click', () => handleBrainstormClick(index, brainstormButton));
                     rightContent.appendChild(brainstormButton);
                 }
-
+                
                 const editButton = document.createElement('button');
                 editButton.className = 'px-3 py-2 bg-yellow-400 text-white rounded-lg shadow-sm hover:bg-yellow-500 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-300';
-                editButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-5.657 5.657l-1.414 1.414L4 14.414V17h2.586l4.414-4.414-2.828-2.828z" />
-                                        </svg>`;
-                editButton.addEventListener('click', () => openEditModal(index));
+                editButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>`;
+                editButton.addEventListener('click', () => openEditTaskModal(index));
+                rightContent.appendChild(editButton);
+
 
                 const deleteButton = document.createElement('button');
                 deleteButton.className = 'px-3 py-2 bg-red-500 text-white rounded-lg shadow-sm hover:bg-red-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400';
@@ -880,7 +1294,6 @@
                 deleteButton.addEventListener('click', () => deleteTask(index, listItem));
 
                 rightContent.appendChild(dueDateSpan);
-                rightContent.appendChild(editButton);
                 rightContent.appendChild(deleteButton);
 
                 taskMainContainer.appendChild(rightContent);
@@ -956,17 +1369,164 @@
                         addSubtaskInput.value = '';
                     }
                 });
-
-                subtasksContainer.appendChild(addSubtaskForm);
-                listItem.appendChild(subtasksContainer);
-                taskList.appendChild(listItem);
+                
+                if (task.completed) {
+                    completedTaskList.appendChild(listItem);
+                    hasCompletedTasks = true;
+                } else {
+                    subtasksContainer.appendChild(addSubtaskForm);
+                    listItem.appendChild(subtasksContainer);
+                    taskList.appendChild(listItem);
+                }
             });
+            
+            completeTasksContainer.classList.toggle('hidden', !hasCompletedTasks);
+
         }
+        
+        // NEW: RENDER CALENDAR FUNCTION
+        function renderCalendar() {
+            const month = calendarDate.getMonth();
+            const year = calendarDate.getFullYear();
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+            
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            calendarGrid.innerHTML = '';
+            
+            // Render day headers
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                const headerCell = document.createElement('div');
+                headerCell.className = 'calendar-header-cell';
+                headerCell.textContent = day;
+                calendarGrid.appendChild(headerCell);
+            });
+            
+            const tasksByDate = {};
+            tasks.forEach((task, index) => {
+                if (task.dueDate) {
+                    if (!tasksByDate[task.dueDate]) {
+                        tasksByDate[task.dueDate] = [];
+                    }
+                    tasksByDate[task.dueDate].push({ ...task, originalIndex: index });
+                }
+            });
+            
+            const eventsByDate = {};
+            events.forEach((event, index) => {
+                if (event.date) {
+                    if (!eventsByDate[event.date]) {
+                        eventsByDate[event.date] = [];
+                    }
+                    eventsByDate[event.date].push({ ...event, originalIndex: index });
+                }
+            });
+
+            // Render blank days
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarGrid.appendChild(document.createElement('div'));
+            }
+            
+            // Render month days
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day-cell';
+                
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                dayCell.dataset.date = dateStr;
+                dayCell.addEventListener('click', () => openAddItemModal(dateStr));
+
+                if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dayCell.classList.add('is-today');
+                }
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayCell.appendChild(dayNumber);
+                
+                if (tasksByDate[dateStr]) {
+                    tasksByDate[dateStr].forEach(task => {
+                        const taskEl = document.createElement('div');
+                        taskEl.className = 'calendar-task';
+                        if (task.completed) {
+                            taskEl.classList.add('completed');
+                        }
+                        taskEl.textContent = task.text;
+                        taskEl.title = task.text;
+                        taskEl.addEventListener('click', (e) => {
+                           e.stopPropagation();
+                           openCalendarItemModal('task', task.originalIndex);
+                        });
+                        dayCell.appendChild(taskEl);
+                    });
+                }
+                
+                if (eventsByDate[dateStr]) {
+                    eventsByDate[dateStr].forEach(event => {
+                        const eventEl = document.createElement('div');
+                        eventEl.className = `calendar-event bg-${event.color}`;
+                        eventEl.textContent = event.time ? `${formatTime12Hour(event.time)} ${event.text}` : event.text;
+                        eventEl.title = event.text;
+                        eventEl.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            openCalendarItemModal('event', event.originalIndex);
+                        });
+                        dayCell.appendChild(eventEl);
+                    });
+                }
+
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+        
+        function formatTime12Hour(time) {
+            if (!time) return '';
+            let [hours, minutes] = time.split(':');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            return `${hours}:${minutes} ${ampm}`;
+        }
+
+        
+        function openCalendarItemModal(type, index) {
+            itemToDelete = { type, index };
+            const item = type === 'task' ? tasks[index] : events[index];
+            calendarItemTitle.textContent = item.text;
+            calendarItemModal.classList.remove('hidden');
+        }
+
+        function closeCalendarItemModal() {
+            calendarItemModal.classList.add('hidden');
+            itemToDelete = null;
+        }
+
+        deleteCalendarItemButton.addEventListener('click', () => {
+            if (itemToDelete) {
+                if (itemToDelete.type === 'task') {
+                    tasks.splice(itemToDelete.index, 1);
+                    saveTasks();
+                } else {
+                    events.splice(itemToDelete.index, 1);
+                    saveEvents();
+                }
+                renderApp();
+                closeCalendarItemModal();
+            }
+        });
+
+        cancelCalendarItemButton.addEventListener('click', closeCalendarItemModal);
+
 
         function toggleSubtaskComplete(parentTask, subtask) {
             subtask.completed = !subtask.completed;
             saveTasks();
-            renderTasks();
+            renderApp();
         }
 
         taskForm.addEventListener('submit', (e) => {
@@ -984,14 +1544,106 @@
                 taskInput.value = '';
                 sortTasksByDueDate();
                 saveTasks();
-                renderTasks();
+                renderApp();
             }
         });
+        
+        function openAddItemModal(dateStr) {
+            currentAddItemDate = dateStr;
+            addItemModal.classList.remove('hidden');
+        }
+
+        function closeAddItemModal() {
+            addItemModal.classList.add('hidden');
+            currentAddItemDate = null;
+            addItemForm.reset();
+            eventColorPicker.classList.add('hidden');
+            eventTimePicker.classList.add('hidden');
+        }
+
+        itemTypeSelect.addEventListener('change', () => {
+            if (itemTypeSelect.value === 'event') {
+                eventColorPicker.classList.remove('hidden');
+                eventTimePicker.classList.remove('hidden');
+            } else {
+                eventColorPicker.classList.add('hidden');
+                eventTimePicker.classList.add('hidden');
+            }
+        });
+        
+        eventColorPicker.addEventListener('click', (e) => {
+            if (e.target.classList.contains('color-option')) {
+                document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+                e.target.classList.add('selected');
+            }
+        });
+        
+        addItemForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const itemText = itemTextInput.value.trim();
+            if (itemText && currentAddItemDate) {
+                if (itemTypeSelect.value === 'task') {
+                    const newTask = {
+                        text: itemText,
+                        completed: false,
+                        dueDate: currentAddItemDate,
+                        subtasks: [],
+                        isExpanded: false
+                    };
+                    tasks.push(newTask);
+                    sortTasksByDueDate();
+                    saveTasks();
+                } else {
+                    const selectedColor = document.querySelector('.color-option.selected').dataset.color;
+                    const newEvent = {
+                        text: itemText,
+                        date: currentAddItemDate,
+                        time: itemTimeInput.value || null,
+                        color: selectedColor
+                    };
+                    events.push(newEvent);
+                    saveEvents();
+                }
+                renderApp();
+                closeAddItemModal();
+            }
+        });
+        
+        function openEditTaskModal(index) {
+            currentEditIndex = index;
+            const task = tasks[index];
+            editTaskText.value = task.text;
+            editTaskDate.value = task.dueDate || '';
+            editTaskModal.classList.remove('hidden');
+        }
+
+        function closeEditTaskModal() {
+            editTaskModal.classList.add('hidden');
+            currentEditIndex = -1;
+        }
+
+        editTaskForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (currentEditIndex > -1) {
+                tasks[currentEditIndex].text = editTaskText.value;
+                tasks[currentEditIndex].dueDate = editTaskDate.value;
+                sortTasksByDueDate();
+                saveTasks();
+                renderApp();
+                closeEditTaskModal();
+            }
+        });
+
+        cancelEditTaskButton.addEventListener('click', closeEditTaskModal);
+
+
+        cancelAddItemButton.addEventListener('click', closeAddItemModal);
+
 
         function toggleComplete(index) {
             tasks[index].completed = !tasks[index].completed;
             saveTasks();
-            renderTasks();
+            renderApp();
         }
 
         function deleteTask(index, element) {
@@ -999,44 +1651,11 @@
             element.addEventListener('animationend', () => {
                 tasks.splice(index, 1);
                 saveTasks();
-                renderTasks();
+                renderApp();
             }, {
                 once: true
             });
         }
-
-        function openEditModal(index) {
-            currentEditIndex = index;
-            const task = tasks[index];
-            editText.value = task.text;
-            editDate.value = task.dueDate || '';
-            editModal.classList.remove('hidden');
-        }
-
-        function closeEditModal() {
-            editModal.classList.add('hidden');
-            currentEditIndex = -1;
-        }
-
-        editForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (currentEditIndex !== -1) {
-                tasks[currentEditIndex].text = editText.value.trim();
-                tasks[currentEditIndex].dueDate = editDate.value || null;
-                sortTasksByDueDate();
-                saveTasks();
-                renderTasks();
-                closeEditModal();
-            }
-        });
-
-        cancelEditButton.addEventListener('click', closeEditModal);
-
-        editModal.addEventListener('click', (e) => {
-            if (e.target.id === 'edit-modal') {
-                closeEditModal();
-            }
-        });
 
         // Settings Modal and Functionality
         let isDraggingSettings = false;
@@ -1049,6 +1668,7 @@
             settingsContent.classList.remove('hidden');
             const exportedData = {
                 tasks: tasks,
+                events: events,
                 apiKey: includeApiKeyToggle.checked ? localStorage.getItem(API_KEY_STORAGE_KEY) : undefined
             };
             exportDataTextarea.value = btoa(JSON.stringify(exportedData));
@@ -1079,40 +1699,33 @@
             isDraggingSettings = false;
         });
 
-        // Corrected Dropdown logic
         const dropdownHeaders = document.querySelectorAll('.dropdown-header');
-        const styleDropdownContainer = document.getElementById('style-dropdown-container');
-        const styleDropdownContent = styleDropdownContainer.querySelector('.dropdown-content');
-        const logoDropdownHeader = document.getElementById('logo-dropdown-header');
-        const logoDropdownContent = logoDropdownHeader.nextElementSibling;
-
         dropdownHeaders.forEach(header => {
             header.addEventListener('click', () => {
-                const clickedContent = header.nextElementSibling;
-                const clickedIcon = header.querySelector('svg');
-                const isStyleOrLogo = header.closest('#style-dropdown-container') !== null;
-                const isStyleDropdownHeader = header.closest('#style-dropdown-container') && header.id !== 'logo-dropdown-header';
-                const isLogoDropdownHeader = header.id === 'logo-dropdown-header';
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('svg');
+                const isNestedDropdown = header.parentElement.classList.contains('settings-dropdown') && header.parentElement.parentElement.classList.contains('dropdown-content');
+                const isStyleDropdownOpen = document.getElementById('style-dropdown-container').querySelector('.dropdown-content').classList.contains('open');
 
-                // Close all dropdowns
-                document.querySelectorAll('.dropdown-content.open').forEach(content => {
+                if (isNestedDropdown && !isStyleDropdownOpen) {
+                    return;
+                }
+                
+                if (content.classList.contains('open')) {
                     content.classList.remove('open');
-                    content.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
-                });
-
-                // If the clicked one is a top-level dropdown (not part of Style or Logo)
-                if (!isStyleOrLogo) {
-                    clickedContent.classList.add('open');
-                    clickedIcon.classList.add('rotate-180');
+                    icon.classList.remove('rotate-180');
                 } else {
-                    // It is a Style or Logo dropdown
-                    styleDropdownContent.classList.add('open');
-                    styleDropdownContainer.querySelector('.dropdown-header svg').classList.add('rotate-180');
-
-                    if (isLogoDropdownHeader) {
-                        logoDropdownContent.classList.add('open');
-                        logoDropdownHeader.querySelector('svg').classList.add('rotate-180');
+                     if (!isNestedDropdown) {
+                        document.querySelectorAll('.dropdown-content.open').forEach(openContent => {
+                            if (!openContent.contains(header)) {
+                                openContent.classList.remove('open');
+                                openContent.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                            }
+                        });
                     }
+
+                    content.classList.add('open');
+                    icon.classList.add('rotate-180');
                 }
             });
         });
@@ -1269,12 +1882,17 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            createParticles();
+            if(particlesEnabled) {
+                createParticles();
+            }
         }
 
         function loadParticlesState() {
             particlesEnabled = localStorage.getItem(PARTICLES_STORAGE_KEY) === 'true';
             particlesToggle.checked = particlesEnabled;
+            if (particlesEnabled) {
+                resizeCanvas();
+            }
         }
 
         particlesToggle.addEventListener('change', () => {
@@ -1303,7 +1921,7 @@
             if (newKey) {
                 localStorage.setItem(API_KEY_STORAGE_KEY, newKey);
                 showCustomAlert("API Key saved successfully! AI features are now enabled.");
-                renderTasks(); // Re-render to show brainstorm buttons
+                renderApp(); // Re-render to show brainstorm buttons
             } else {
                 showCustomAlert("Please enter a valid API key.");
             }
@@ -1322,10 +1940,12 @@
             } else {
                 clearTimeout(deleteConfirmTimeout);
                 tasks = [];
+                events = [];
                 localStorage.removeItem(STORAGE_KEY);
                 localStorage.removeItem(API_KEY_STORAGE_KEY);
-                saveTasks();
-                renderTasks();
+                localStorage.removeItem(EVENTS_STORAGE_KEY);
+                saveAllData();
+                renderApp();
                 closeSettingsModal();
                 deleteAllDataButton.textContent = 'Delete All Data';
                 deleteAllDataButton.classList.remove('bg-red-700');
@@ -1336,6 +1956,7 @@
         copyExportDataButton.addEventListener('click', () => {
             const exportedData = {
                 tasks: tasks,
+                events: events,
                 apiKey: includeApiKeyToggle.checked ? localStorage.getItem(API_KEY_STORAGE_KEY) : undefined
             };
             const dataToCopy = btoa(JSON.stringify(exportedData));
@@ -1350,29 +1971,32 @@
                 const importedData = JSON.parse(atob(importDataTextarea.value));
                 if (Array.isArray(importedData)) { // Old format, only tasks
                     tasks = importedData;
+                    events = [];
                     localStorage.removeItem(API_KEY_STORAGE_KEY);
-                    showCustomAlert("Data imported successfully! No API Key was found in the data, so you may need to add it again.");
+                    showCustomAlert("Data imported successfully! No API Key or events were found in the data.");
                 } else if (typeof importedData === 'object' && importedData.tasks) {
-                    tasks = importedData.tasks;
+                    tasks = importedData.tasks || [];
+                    events = importedData.events || [];
                     if (importedData.apiKey) {
                         localStorage.setItem(API_KEY_STORAGE_KEY, importedData.apiKey);
                         showCustomAlert("Data imported successfully, and API Key applied!");
                     } else {
                         localStorage.removeItem(API_KEY_STORAGE_KEY);
-                        showCustomAlert("Data imported successfully! No API Key was found in the data, so you may need to add it again.");
+                        showCustomAlert("Data imported successfully! No API Key was found in the data.");
                     }
                 } else {
                     throw new Error('Invalid data format.');
                 }
                 sortTasksByDueDate();
-                saveTasks();
-                renderTasks();
+                saveAllData();
+                renderApp();
                 closeSettingsModal();
             } catch (e) {
                 console.error('Import failed:', e);
                 showCustomAlert("Import failed: Invalid data format.");
             }
         });
+
 
         // Gemini Chat Functionality
         let isDraggingGemini = false;
@@ -1603,6 +2227,34 @@
 
         // Event listener for the "New Chat" button
         newChatButton.addEventListener('click', clearGeminiChat);
+        
+        // NEW: TAB SWITCHING LOGIC
+        todoTabButton.addEventListener('click', () => {
+            todoTabButton.classList.add('active');
+            calendarTabButton.classList.remove('active');
+            todoPanel.classList.remove('hidden');
+            calendarPanel.classList.add('hidden');
+            mainContainer.classList.remove('calendar-view');
+        });
+
+        calendarTabButton.addEventListener('click', () => {
+            calendarTabButton.classList.add('active');
+            todoTabButton.classList.remove('active');
+            calendarPanel.classList.remove('hidden');
+            todoPanel.classList.add('hidden');
+            mainContainer.classList.add('calendar-view');
+        });
+
+        
+        // NEW: CALENDAR NAVIGATION
+        prevMonthBtn.addEventListener('click', () => {
+            calendarDate.setMonth(calendarDate.getMonth() - 1);
+            renderCalendar();
+        });
+        nextMonthBtn.addEventListener('click', () => {
+            calendarDate.setMonth(calendarDate.getMonth() + 1);
+            renderCalendar();
+        });
 
         // Custom alert functionality
         function showCustomAlert(message) {
@@ -1614,10 +2266,101 @@
             customAlertModal.classList.add('hidden');
         });
 
+        // Clock functionality
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Digital clock
+            digitalClock.textContent = formatTime12Hour(`${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}`);
+
+            // Analog clock
+            const secondsRatio = seconds / 60;
+            const minutesRatio = (secondsRatio + minutes) / 60;
+            const hoursRatio = (minutesRatio + hours) / 12;
+
+            secondHand.style.transform = `rotate(${secondsRatio * 360}deg)`;
+            minuteHand.style.transform = `rotate(${minutesRatio * 360}deg)`;
+            hourHand.style.transform = `rotate(${hoursRatio * 360}deg)`;
+        }
+        
+        clockToggle.addEventListener('change', (e) => {
+            localStorage.setItem(CLOCK_ENABLED_STORAGE_KEY, e.target.checked);
+            updateClockVisibility();
+        });
+
+        clockStyleSelect.addEventListener('change', (e) => {
+            localStorage.setItem(CLOCK_STYLE_STORAGE_KEY, e.target.value);
+            updateClockStyle();
+        });
+
+        function updateClockVisibility() {
+            const isEnabled = localStorage.getItem(CLOCK_ENABLED_STORAGE_KEY) === 'true';
+            liveClock.classList.toggle('hidden', !isEnabled);
+        }
+
+        function updateClockStyle() {
+            const style = localStorage.getItem(CLOCK_STYLE_STORAGE_KEY) || 'digital';
+            if (style === 'analog') {
+                digitalClock.classList.add('hidden');
+                analogClock.classList.remove('hidden');
+            } else {
+                digitalClock.classList.remove('hidden');
+                analogClock.classList.add('hidden');
+            }
+        }
+        
+        let isDraggingClock = false;
+        let clockOffset = { x: 0, y: 0 };
+
+        clockDragHandle.addEventListener('mousedown', (e) => {
+            isDraggingClock = true;
+            clockOffset.x = e.clientX - liveClock.offsetLeft;
+            clockOffset.y = e.clientY - liveClock.offsetTop;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDraggingClock) {
+                liveClock.style.left = `${e.clientX - clockOffset.x}px`;
+                liveClock.style.top = `${e.clientY - clockOffset.y}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if(isDraggingClock) {
+                 localStorage.setItem(CLOCK_POSITION_STORAGE_KEY, JSON.stringify({ top: liveClock.style.top, left: liveClock.style.left}));
+            }
+            isDraggingClock = false;
+        });
+
+        function loadClockState() {
+            const isEnabled = localStorage.getItem(CLOCK_ENABLED_STORAGE_KEY) === 'true';
+            clockToggle.checked = isEnabled;
+            updateClockVisibility();
+            
+            const style = localStorage.getItem(CLOCK_STYLE_STORAGE_KEY) || 'digital';
+            clockStyleSelect.value = style;
+            updateClockStyle();
+
+            const position = JSON.parse(localStorage.getItem(CLOCK_POSITION_STORAGE_KEY));
+            if(position) {
+                liveClock.style.top = position.top;
+                liveClock.style.left = position.left;
+            }
+        }
+
+
         window.onload = () => {
-            loadTasks();
+            loadAllData();
+            loadTheme();
+            loadParticlesState();
+            loadLogoState();
+            loadClockState();
             clearGeminiChat();
             animateBackground(); // Start the combined animation loop
+            setInterval(updateClock, 1000);
         };
     </script>
 </body>
