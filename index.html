@@ -1427,7 +1427,9 @@
 
             // Render blank days
             for (let i = 0; i < firstDayOfMonth; i++) {
-                calendarGrid.appendChild(document.createElement('div'));
+                const blankCell = document.createElement('div');
+                blankCell.className = 'calendar-day-cell is-other-month';
+                calendarGrid.appendChild(blankCell);
             }
             
             // Render month days
@@ -2317,8 +2319,8 @@
 
         clockDragHandle.addEventListener('mousedown', (e) => {
             isDraggingClock = true;
-            clockOffset.x = e.clientX - liveClock.offsetLeft;
-            clockOffset.y = e.clientY - liveClock.offsetTop;
+            clockOffset.x = e.clientX - liveClock.getBoundingClientRect().left;
+            clockOffset.y = e.clientY - liveClock.getBoundingClientRect().top;
         });
 
         document.addEventListener('mousemove', (e) => {
