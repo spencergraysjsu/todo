@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Live Chat</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the chat application */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom scrollbar for a cleaner look */
+        #messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        #messages-container::-webkit-scrollbar-track {
+            background: #2d3748; /* bg-gray-800 */
+        }
+        #messages-container::-webkit-scrollbar-thumb {
+            background: #4a5568; /* bg-gray-700 */
+            border-radius: 3px;
+        }
+        #messages-container::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* bg-gray-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+
+    <div id="app-container" class="w-full max-w-lg mx-auto h-full md:h-[90vh] md:max-h-[700px] flex flex-col bg-gray-800 shadow-2xl rounded-lg overflow-hidden">
+
+        <!-- Authentication Screen -->
+        <div id="auth-container" class="p-8 flex flex-col items-center justify-center h-full">
+            <svg class="w-16 h-16 mb-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <h1 class="text-3xl font-bold mb-2">Welcome to Live Chat</h1>
+            <p class="text-gray-400 mb-8">Login or Register to start chatting.</p>
+
+            <!-- Tab buttons for Login/Register -->
+            <div class="w-full flex mb-6 border-b border-gray-700">
+                <button id="login-tab-button" class="flex-1 py-2 text-center font-semibold border-b-2 border-indigo-400 text-indigo-400 transition">Login</button>
+                <button id="register-tab-button" class="flex-1 py-2 text-center font-semibold text-gray-500 transition">Register</button>
+            </div>
+            
+            <div id="auth-forms" class="w-full max-w-sm">
+                <!-- Login Form -->
+                <form id="login-form" class="space-y-4">
+                    <input type="email" id="login-email" placeholder="Email" class="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+                    <input type="password" id="login-password" placeholder="Password" class="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+                    <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-md transition">Login</button>
+                    <p id="login-error" class="text-red-400 text-sm text-center h-4"></p>
+                </form>
+
+                <!-- Registration Form (hidden by default) -->
+                <form id="register-form" class="space-y-4 hidden">
+                    <input type="email" id="register-email" placeholder="Email" class="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+                    <input type="password" id="register-password" placeholder="Password (min. 6 characters)" class="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+                    <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-md transition">Register</button>
+                    <p id="register-error" class="text-red-400 text-sm text-center h-4"></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Chat Screen (hidden by default) -->
+        <div id="chat-container" class="hidden flex-col h-full">
+            <!-- Header -->
+            <header class="flex items-center justify-between p-4 bg-gray-900/50 backdrop-blur-sm border-b border-gray-700">
+                <div class="flex items-center">
+                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                    <h2 class="text-lg font-semibold">Live Chat</h2>
+                </div>
+                <button id="logout-button" class="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition">Logout</button>
+            </header>
+            
+            <!-- Messages Container -->
+            <div id="messages-container" class="flex-1 p-4 space-y-4 overflow-y-auto">
+                <!-- Messages will be dynamically added here -->
+            </div>
+
+            <!-- Message Input Form -->
+            <footer class="p-4 bg-gray-900/50 backdrop-blur-sm border-t border-gray-700">
+                <form id="message-form" class="flex items-center space-x-3">
+                    <input id="message-input" type="text" placeholder="Type your message..." class="flex-1 p-3 bg-gray-700 rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400" autocomplete="off">
+                    <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-full flex items-center justify-center transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </button>
+                </form>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Integration -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            getFirestore,
+            collection,
+            addDoc,
+            query,
+            orderBy,
+            onSnapshot,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration from the user
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7B94SGHRMrjTK0yy-7OCkS1PqFVuh7Po",
+            authDomain: "productivityhub-8fe07.firebaseapp.com",
+            projectId: "productivityhub-8fe07",
+            storageBucket: "productivityhub-8fe07.appspot.com", // Corrected storageBucket domain
+            messagingSenderId: "294776137961",
+            appId: "1:294776137961:web:ef0a009e0f6abb4009e878",
+            measurementId: "G-ZY314QYTPE"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const authContainer = document.getElementById('auth-container');
+        const chatContainer = document.getElementById('chat-container');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const messageForm = document.getElementById('message-form');
+        const logoutButton = document.getElementById('logout-button');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message-input');
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        const loginTabButton = document.getElementById('login-tab-button');
+        const registerTabButton = document.getElementById('register-tab-button');
+
+        let unsubscribeFromMessages = null;
+
+        // --- Authentication Logic ---
+
+        // Handle Auth State Changes
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                // User is logged in
+                authContainer.classList.add('hidden');
+                chatContainer.classList.remove('hidden');
+                chatContainer.classList.add('flex');
+                
+                // Listen for new messages
+                listenForMessages();
+
+            } else {
+                // User is logged out
+                chatContainer.classList.add('hidden');
+                chatContainer.classList.remove('flex');
+                authContainer.classList.remove('hidden');
+
+                // Stop listening for messages
+                if (unsubscribeFromMessages) {
+                    unsubscribeFromMessages();
+                }
+            }
+        });
+
+        // Tab switching
+        loginTabButton.addEventListener('click', () => {
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            loginTabButton.classList.add('border-indigo-400', 'text-indigo-400');
+            registerTabButton.classList.remove('border-indigo-400', 'text-indigo-400');
+            registerTabButton.classList.add('text-gray-500');
+        });
+
+        registerTabButton.addEventListener('click', () => {
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            registerTabButton.classList.add('border-indigo-400', 'text-indigo-400');
+            loginTabButton.classList.remove('border-indigo-400', 'text-indigo-400');
+            loginTabButton.classList.add('text-gray-500');
+        });
+
+        // Handle Registration
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            registerError.textContent = '';
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error("Registration Error:", error);
+                registerError.textContent = getFriendlyAuthError(error.code);
+            }
+        });
+
+        // Handle Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            loginError.textContent = '';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error("Login Error:", error);
+                loginError.textContent = getFriendlyAuthError(error.code);
+            }
+        });
+
+        // Handle Logout
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error("Logout Error:", error);
+                alert("Failed to log out. Please try again.");
+            }
+        });
+
+        // --- Firestore Chat Logic ---
+
+        // Handle sending messages
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+            const user = auth.currentUser;
+
+            if (messageText && user) {
+                try {
+                    await addDoc(collection(db, "messages"), {
+                        text: messageText,
+                        uid: user.uid,
+                        displayName: user.email,
+                        timestamp: serverTimestamp()
+                    });
+                    messageInput.value = ''; // Clear input field
+                } catch (error) {
+                    console.error("Error sending message: ", error);
+                }
+            }
+        });
+
+        // Listen for and display messages
+        function listenForMessages() {
+            const q = query(collection(db, "messages"), orderBy("timestamp"));
+            
+            unsubscribeFromMessages = onSnapshot(q, (querySnapshot) => {
+                messagesContainer.innerHTML = ''; // Clear previous messages
+                querySnapshot.forEach((doc) => {
+                    const message = doc.data();
+                    const messageElement = createMessageElement(message);
+                    messagesContainer.appendChild(messageElement);
+                });
+                // Scroll to the latest message
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
+        }
+
+        // --- Helper Functions ---
+
+        // Create HTML element for a single message
+        function createMessageElement(message) {
+            const div = document.createElement('div');
+            const currentUser = auth.currentUser;
+            const isSentByCurrentUser = currentUser && message.uid === currentUser.uid;
+
+            // Base classes
+            div.className = 'flex flex-col max-w-xs md:max-w-md';
+
+            // Determine alignment and color
+            if (isSentByCurrentUser) {
+                div.classList.add('self-end', 'items-end');
+            } else {
+                div.classList.add('self-start', 'items-start');
+            }
+            
+            // Message bubble
+            const bubble = document.createElement('div');
+            bubble.textContent = message.text;
+            bubble.className = 'px-4 py-2 rounded-lg shadow';
+            
+            if (isSentByCurrentUser) {
+                bubble.classList.add('bg-indigo-500', 'rounded-br-none');
+            } else {
+                bubble.classList.add('bg-gray-700', 'rounded-bl-none');
+            }
+
+            // User email and timestamp
+            const meta = document.createElement('p');
+            meta.className = 'text-xs text-gray-500 mt-1';
+            const messageTime = message.timestamp ? message.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Sending...';
+            meta.textContent = `${isSentByCurrentUser ? 'You' : message.displayName} • ${messageTime}`;
+            
+            div.appendChild(bubble);
+            div.appendChild(meta);
+
+            return div;
+        }
+
+        // Provide user-friendly error messages
+        function getFriendlyAuthError(errorCode) {
+            switch (errorCode) {
+                case 'auth/invalid-email':
+                    return 'Please enter a valid email address.';
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                case 'auth/invalid-credential':
+                    return 'Invalid email or password.';
+                case 'auth/weak-password':
+                    return 'Password should be at least 6 characters.';
+                case 'auth/email-already-in-use':
+                    return 'An account already exists with this email.';
+                default:
+                    return 'An unexpected error occurred. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>
