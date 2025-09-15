@@ -910,17 +910,19 @@
                         class="w-full px-4 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition-all duration-200">
                         Delete All Data
                     </button>
-                
-                    <button id="logout-button"
-                        class="w-full mt-3 px-4 py-3 rounded-full bg-gray-700 text-white font-semibold hover:bg-gray-800 transition-all duration-200">
-                        Log out
-                    </button>
                     <button id="delete-account-button"
                         class="w-full mt-3 px-4 py-3 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-all duration-200">
                         Delete Account
                     </button>
                 </div>
-            </div>
+                <div class="mt-6 border-t pt-4">
+        <button id="logout-button"
+            class="w-full px-4 py-3 rounded-full bg-gray-800 text-white font-semibold hover:bg-gray-900 transition-all duration-200">
+            Log out
+        </button>
+    </div>
+
+</div>
         </div>
     </div>
 
@@ -1198,6 +1200,7 @@ function debounceSave(){
         let originalGeminiState = null;
         let currentAddItemDate = null;
         let itemToDelete = null;
+        let currentApiKey = null;
         
         // Calendar state
         let calendarDate = new Date();
@@ -1240,9 +1243,9 @@ function loadEvents(){ /* events load from Firestore */ }
         }
 
         async function brainstormSubtasks(taskText, brainstormButton) {
-            const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            const apiKey = currentApiKey;
             if (!apiKey) {
-                showCustomAlert("No API key found. Please import your key in Settings to use this feature.");
+                showCustomAlert("No API key found. Please save your key in Settings to use this feature.");
                 return;
             }
 
@@ -1362,7 +1365,7 @@ function loadEvents(){ /* events load from Firestore */ }
             taskList.innerHTML = '';
             completedTaskList.innerHTML = '';
             
-            const hasApiKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
+            const hasApiKey = !!currentApiKey;
             let hasCompletedTasks = false;
 
             tasks.forEach((task, index) => {
@@ -1809,7 +1812,7 @@ function loadEvents(){ /* events load from Firestore */ }
             const exportedData = {
                 tasks: tasks,
                 events: events,
-                apiKey: includeApiKeyToggle.checked ? localStorage.getItem(API_KEY_STORAGE_KEY) : undefined
+                apiKey: includeApiKeyToggle.checked ? currentApiKey : undefined
             };
             exportDataTextarea.value = btoa(JSON.stringify(exportedData));
         }
@@ -2020,10 +2023,14 @@ function loadEvents(){ /* events load from Firestore */ }
         }
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            if(particlesEnabled) {
-                createParticles();
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (canvas.width !== w || canvas.height !== h) {
+                canvas.width = w;
+                canvas.height = h;
+                if (particlesEnabled) {
+                    createParticles();
+                }
             }
         }
 
@@ -2032,6 +2039,9 @@ function loadEvents(){ /* events load from Firestore */ }
             particlesToggle.checked = particlesEnabled;
             if (particlesEnabled) {
                 resizeCanvas();
+                createParticles();
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
         }
 
@@ -2040,6 +2050,7 @@ function loadEvents(){ /* events load from Firestore */ }
             localStorage.setItem(PARTICLES_STORAGE_KEY, particlesEnabled);
             if (particlesEnabled) {
                 resizeCanvas();
+                createParticles();
             } else {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
@@ -2055,19 +2066,29 @@ function loadEvents(){ /* events load from Firestore */ }
         });
 
 
-        // Save API Key
-        saveApiKeyButton.addEventListener('click', () => {
+        // Save API Key via Firestore
+        saveApiKeyButton.addEventListener('click', async () => {
             const newKey = apiKeyInput.value.trim();
-            if (newKey) {
-                localStorage.setItem(API_KEY_STORAGE_KEY, newKey);
-                showCustomAlert("API Key saved successfully! AI features are now enabled.");
-                renderApp(); // Re-render to show brainstorm buttons
-            } else {
+            if (!newKey) {
                 showCustomAlert("Please enter a valid API key.");
+                return;
+            }
+            if (!currentUser) {
+                showCustomAlert("Please sign in first to save your API key securely.");
+                return;
+            }
+            try {
+                await setDoc(userDocRef, { apiKey: newKey }, { merge: true });
+                currentApiKey = newKey;
+                showCustomAlert("API Key saved securely to your account.");
+                renderApp(); // Re-render to show brainstorm buttons
+            } catch (e) {
+                console.error('Failed to save API key:', e);
+                showCustomAlert("Could not save API key. Please try again.");
             }
         });
 
-        // Delete All Data
+// Delete All Data
         let deleteConfirmTimeout;
         deleteAllDataButton.addEventListener('click', async () => {
     try {
@@ -2081,7 +2102,7 @@ function loadEvents(){ /* events load from Firestore */ }
             const exportedData = {
                 tasks: tasks,
                 events: events,
-                apiKey: includeApiKeyToggle.checked ? localStorage.getItem(API_KEY_STORAGE_KEY) : undefined
+                apiKey: includeApiKeyToggle.checked ? currentApiKey : undefined
             };
             const dataToCopy = btoa(JSON.stringify(exportedData));
             exportDataTextarea.value = dataToCopy;
@@ -2090,22 +2111,22 @@ function loadEvents(){ /* events load from Firestore */ }
         });
 
         // Import data
-importButton.addEventListener('click', () => {
+importButton.addEventListener('click', async () => {
     try {
         const importedData = JSON.parse(atob(importDataTextarea.value));
         if (Array.isArray(importedData)) { // Old format, only tasks
             tasks = importedData;
             events = [];
-            localStorage.removeItem(API_KEY_STORAGE_KEY);
+            try { await setDoc(userDocRef, { apiKey: null }, { merge: true }); currentApiKey = null; } catch(e){ console.error(e); }
             showCustomAlert("Data imported successfully! No API Key or events were found in the data.");
         } else if (typeof importedData === 'object' && importedData.tasks) {
             tasks = importedData.tasks || [];
             events = importedData.events || [];
             if (importedData.apiKey) {
-                localStorage.setItem(API_KEY_STORAGE_KEY, importedData.apiKey);
+                try { await setDoc(userDocRef, { apiKey: importedData.apiKey }, { merge: true }); currentApiKey = importedData.apiKey; } catch(e){ console.error(e); }
                 showCustomAlert("Data imported successfully, and API Key applied!");
             } else {
-                localStorage.removeItem(API_KEY_STORAGE_KEY);
+                try { await setDoc(userDocRef, { apiKey: null }, { merge: true }); currentApiKey = null; } catch(e){ console.error(e); }
                 showCustomAlert("Data imported successfully! No API Key was found in the data.");
             }
         } else {
@@ -2130,7 +2151,7 @@ importButton.addEventListener('click', () => {
         };
 
         function openGeminiModal() {
-            const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            const apiKey = currentApiKey;
             if (!apiKey) {
                 showCustomAlert("Please go to **Settings > AI Features** to import your API key to enable this feature.");
                 return;
@@ -2225,9 +2246,9 @@ importButton.addEventListener('click', () => {
 
         // Function to send a message to the Gemini API
         async function sendMessageToGemini(prompt) {
-            const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            const apiKey = currentApiKey;
             if (!apiKey) {
-                showCustomAlert("No API key found. Please import your key in Settings to use this feature.");
+                showCustomAlert("No API key found. Please save your key in Settings to use this feature.");
                 return "Please set your API key in the Settings to enable chat functionality.";
             }
 
@@ -2532,6 +2553,7 @@ async function ensureUserDoc(){
       tasks: [],
       events: [],
       settings: collectSettingsFromLocal(),
+      apiKey: null,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
@@ -2548,6 +2570,7 @@ function startUserSnapshot(){
       if (data.settings) {
         applySettingsToUI(data.settings);
       }
+      currentApiKey = data.apiKey || null;
       sortTasksByDueDate();
       renderApp();
     }
