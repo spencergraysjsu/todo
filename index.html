@@ -24,7 +24,7 @@
             text-decoration: line-through;
             color: #9ca3af;
         }
-
+        
         .modal-content {
             animation: fadeIn 0.3s ease-out;
             position: fixed;
@@ -33,11 +33,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-        
+
         #main-container.calendar-view {
             max-width: 90vw;
         }
-
 
         /* Dark mode styles */
         .dark body,
@@ -329,20 +328,9 @@
             border-bottom-color: #60a5fa;
         }
 
-        .calendar-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 4px; }
 
-        .calendar-header-cell,
-        .calendar-day-cell {
-            text-align: center;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            flex: 1 1 calc(100% / 7 - 4px);
-            min-width: 120px;
-        }
+        .calendar-header-cell, .calendar-day-cell { text-align:center; padding:0.5rem; border-radius:0.5rem; }
         
         .calendar-header-cell {
             font-weight: 700;
@@ -502,6 +490,45 @@
 
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
+    <!-- AUTH VIEW (shown when signed out) -->
+    <div id="auth-view" class="w-full max-w-md mx-auto p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-6">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800 text-center">Welcome</h2>
+            <p class="text-sm text-gray-500 text-center mb-6">Log in or create an account to sync your data.</p>
+            <form id="auth-form" class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="auth-email">Email</label>
+                    <input id="auth-email" type="email" required class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input" placeholder="you@example.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="auth-password">Password</label>
+                    <input id="auth-password" type="password" required minlength="6" class="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 animated-input" placeholder="••••••••">
+                </div>
+                <button id="auth-submit" type="submit" class="w-full bg-blue-500 text-white p-3 rounded-xl shadow-lg hover:bg-blue-600 transition-all duration-200">Log in</button>
+            </form>
+            <div class="flex items-center justify-between mt-4 text-sm">
+                <span id="auth-mode-text" class="text-gray-600">New here?</span>
+                <button id="toggle-auth-mode" class="text-blue-600 hover:underline">Create an account</button>
+
+                <button id="sign-out-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 hidden"
+                    title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
+                </button>
+            </div>
+            <p id="auth-error" class="text-red-600 text-sm mt-3 hidden"></p>
+        </div>
+    </div>
+    <!-- END AUTH VIEW -->
+    
+    <!-- APP VIEW (hidden until signed in) -->
+    <div id="app-view" class="hidden w-full min-h-screen flex items-center justify-center">
+
+
     <canvas id="particles-canvas"></canvas>
     <img id="floating-logo" class="floating-logo hidden" src="" alt="Floating Logo">
     
@@ -518,7 +545,7 @@
     <div id="main-container" class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-4xl z-10">
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">My Productivity Hub</h1>
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2"><span id="user-email" class="hidden md:inline text-sm text-gray-500 mr-2"></span>
                 <button id="gemini-button"
                     class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
@@ -533,6 +560,16 @@
                         stroke="currentColor" fill="none">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 15a3 3 0 100-6 3 3 0 000 6z" />
+                    </svg>
+                </button>
+
+                <button id="sign-out-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 hidden"
+                    title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                     </svg>
                 </button>
             </div>
@@ -574,6 +611,16 @@
                 <h2 id="calendar-month-year" class="text-xl font-bold text-gray-800"></h2>
                  <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600">
                     <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+
+                <button id="sign-out-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 hidden"
+                    title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
                 </button>
             </div>
             <div id="calendar-grid" class="calendar-grid">
@@ -621,6 +668,16 @@
                 <button type="button" id="cancel-calendar-item"
                     class="px-4 py-2 text-gray-600 font-semibold rounded-full hover:bg-gray-200 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
                     Cancel
+                </button>
+
+                <button id="sign-out-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 hidden"
+                    title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -853,6 +910,15 @@
                         class="w-full px-4 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition-all duration-200">
                         Delete All Data
                     </button>
+                
+                    <button id="logout-button"
+                        class="w-full mt-3 px-4 py-3 rounded-full bg-gray-700 text-white font-semibold hover:bg-gray-800 transition-all duration-200">
+                        Log out
+                    </button>
+                    <button id="delete-account-button"
+                        class="w-full mt-3 px-4 py-3 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-all duration-200">
+                        Delete Account
+                    </button>
                 </div>
             </div>
         </div>
@@ -863,7 +929,7 @@
         style="width: 500px; min-width: 300px; height: 500px; min-height: 300px;">
         <div id="gemini-header" class="drag-handle flex items-center justify-between mb-4">
             <h2 class="text-2xl font-semibold text-gray-800">Gemini Chat</h2>
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2"><span id="user-email" class="hidden md:inline text-sm text-gray-500 mr-2"></span>
                 <button id="new-chat-btn"
                     class="px-4 py-2 rounded-full text-sm font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors duration-200 focus:outline-none">
                     New Chat
@@ -873,6 +939,16 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <button id="sign-out-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 hidden"
+                    title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                     </svg>
                 </button>
             </div>
@@ -904,12 +980,22 @@
                     class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-600 transition-all duration-200 focus:outline-none">
                     OK
                 </button>
+
+                <button id="sign-out-button"
+                    class="p-2 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 hidden"
+                    title="Sign out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" fill="none">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
 
 
-    <script>
+    <script type="module">
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const STORAGE_KEY = `todo-app-${appId}`;
         const API_KEY_STORAGE_KEY = 'gemini-api-key';
@@ -921,6 +1007,91 @@
         const CLOCK_ENABLED_STORAGE_KEY = 'clock-enabled';
         const CLOCK_STYLE_STORAGE_KEY = 'clock-style';
         const CLOCK_POSITION_STORAGE_KEY = 'clock-position';
+
+
+// === Firebase setup ===
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyA4y0PSIfgooaUIMg5VLbPgYtqx9TVwbKw",
+    authDomain: "todo-c98c2.firebaseapp.com",
+    projectId: "todo-c98c2",
+    storageBucket: "todo-c98c2.firebasestorage.app",
+    messagingSenderId: "864123807495",
+    appId: "1:864123807495:web:bd8853f3f5349cd7c347a2",
+    measurementId: "G-0WN4LR9LJ2"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+try { getAnalytics(fbApp); } catch (e) { /* analytics optional */ }
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+
+// Firestore doc for this user
+let currentUser = null;
+let userDocRef = null;
+let unsubscribeUserDoc = null;
+
+// Settings helpers (mirror local settings into Firestore)
+const DEFAULT_SETTINGS = {
+  [THEME_STORAGE_KEY]: 'light',
+  [PARTICLES_STORAGE_KEY]: 'false',
+  [LOGO_ENABLED_STORAGE_KEY]: 'false',
+  [LOGO_URL_STORAGE_KEY]: '',
+  [CLOCK_ENABLED_STORAGE_KEY]: 'false',
+  [CLOCK_STYLE_STORAGE_KEY]: 'digital',
+  [CLOCK_POSITION_STORAGE_KEY]: JSON.stringify({top:'',left:''})
+};
+
+function collectSettingsFromLocal() {
+  return {
+    theme: localStorage.getItem(THEME_STORAGE_KEY) || DEFAULT_SETTINGS[THEME_STORAGE_KEY],
+    particlesEnabled: localStorage.getItem(PARTICLES_STORAGE_KEY) === 'true',
+    logoEnabled: localStorage.getItem(LOGO_ENABLED_STORAGE_KEY) === 'true',
+    logoUrl: localStorage.getItem(LOGO_URL_STORAGE_KEY) || '',
+    clockEnabled: localStorage.getItem(CLOCK_ENABLED_STORAGE_KEY) === 'true',
+    clockStyle: localStorage.getItem(CLOCK_STYLE_STORAGE_KEY) || 'digital',
+    clockPosition: (()=>{try{return JSON.parse(localStorage.getItem(CLOCK_POSITION_STORAGE_KEY)||'{}');}catch(e){return {};} })()
+  };
+}
+
+function applySettingsToUI(settingsData){
+  // Write settings into localStorage (so existing UI logic continues to work)
+  if (settingsData.theme) localStorage.setItem(THEME_STORAGE_KEY, settingsData.theme);
+  localStorage.setItem(PARTICLES_STORAGE_KEY, settingsData.particlesEnabled ? 'true' : 'false');
+  localStorage.setItem(LOGO_ENABLED_STORAGE_KEY, settingsData.logoEnabled ? 'true' : 'false');
+  localStorage.setItem(LOGO_URL_STORAGE_KEY, settingsData.logoUrl || '');
+  localStorage.setItem(CLOCK_ENABLED_STORAGE_KEY, settingsData.clockEnabled ? 'true' : 'false');
+  if (settingsData.clockStyle) localStorage.setItem(CLOCK_STYLE_STORAGE_KEY, settingsData.clockStyle);
+  if (settingsData.clockPosition) localStorage.setItem(CLOCK_POSITION_STORAGE_KEY, JSON.stringify(settingsData.clockPosition));
+
+  // Then re-run the existing loaders to reflect state
+  loadTheme();
+  loadParticlesState();
+  updateLogo();
+  loadClockState();
+}
+
+let saveTimer = null;
+async function saveAllDataFirestore() {
+  if (!currentUser || !userDocRef) return;
+  const settingsData = collectSettingsFromLocal();
+  try {
+    await setDoc(userDocRef, {
+      tasks, events,
+      settings: settingsData,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  } catch(e){ console.error('saveAllDataFirestore error:', e); }
+}
+function debounceSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveAllDataFirestore, 400);
+}
+
 
         const mainContainer = document.getElementById('main-container');
 
@@ -1031,26 +1202,11 @@
         // Calendar state
         let calendarDate = new Date();
         
-        function saveAllData() {
-            saveTasks();
-            saveEvents();
-        }
+        function saveAllData(){ debounceSave(); }
 
-        function saveTasks() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-            } catch (e) {
-                console.error('Error saving to local storage:', e);
-            }
-        }
+        function saveTasks(){ debounceSave(); } 
         
-        function saveEvents() {
-            try {
-                localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(events));
-            } catch (e) {
-                console.error('Error saving events to local storage:', e);
-            }
-        }
+        function saveEvents(){ debounceSave(); } 
         
         function loadAllData() {
             loadTasks();
@@ -1058,30 +1214,11 @@
             renderApp();
         }
 
-        function loadTasks() {
-            try {
-                const storedTasks = localStorage.getItem(STORAGE_KEY);
-                if (storedTasks) {
-                    tasks = JSON.parse(storedTasks);
-                }
-            } catch (e) {
-                console.error('Error loading from local storage:', e);
-                tasks = [];
-            }
-            sortTasksByDueDate();
-        }
+function loadTasks(){ /* tasks load from Firestore */ 
+    sortTasksByDueDate();
+}
         
-        function loadEvents() {
-            try {
-                const storedEvents = localStorage.getItem(EVENTS_STORAGE_KEY);
-                if (storedEvents) {
-                    events = JSON.parse(storedEvents);
-                }
-            } catch (e) {
-                console.error('Error loading events from local storage:', e);
-                events = [];
-            }
-        }
+function loadEvents(){ /* events load from Firestore */ }
 
         function sortTasksByDueDate() {
             tasks.sort((a, b) => {
@@ -1932,30 +2069,14 @@
 
         // Delete All Data
         let deleteConfirmTimeout;
-        deleteAllDataButton.addEventListener('click', () => {
-            if (deleteAllDataButton.textContent === 'Delete All Data') {
-                deleteAllDataButton.textContent = 'Click to Confirm';
-                deleteAllDataButton.classList.add('bg-red-700');
-                deleteConfirmTimeout = setTimeout(() => {
-                    deleteAllDataButton.textContent = 'Delete All Data';
-                    deleteAllDataButton.classList.remove('bg-red-700');
-                }, 3000);
-            } else {
-                clearTimeout(deleteConfirmTimeout);
-                tasks = [];
-                events = [];
-                localStorage.removeItem(STORAGE_KEY);
-                localStorage.removeItem(API_KEY_STORAGE_KEY);
-                localStorage.removeItem(EVENTS_STORAGE_KEY);
-                saveAllData();
-                renderApp();
-                closeSettingsModal();
-                deleteAllDataButton.textContent = 'Delete All Data';
-                deleteAllDataButton.classList.remove('bg-red-700');
-            }
-        });
-
-        // Export data
+        deleteAllDataButton.addEventListener('click', async () => {
+    try {
+        tasks = [];
+        events = [];
+        await saveAllDataFirestore();
+        renderApp();
+        closeSettingsModal();
+    } catch (e) { console.error('Failed to delete data:', e); showCustomAlert('Failed to delete your data. Please try again.'); } });// Export data
         copyExportDataButton.addEventListener('click', () => {
             const exportedData = {
                 tasks: tasks,
@@ -1969,36 +2090,36 @@
         });
 
         // Import data
-        importButton.addEventListener('click', () => {
-            try {
-                const importedData = JSON.parse(atob(importDataTextarea.value));
-                if (Array.isArray(importedData)) { // Old format, only tasks
-                    tasks = importedData;
-                    events = [];
-                    localStorage.removeItem(API_KEY_STORAGE_KEY);
-                    showCustomAlert("Data imported successfully! No API Key or events were found in the data.");
-                } else if (typeof importedData === 'object' && importedData.tasks) {
-                    tasks = importedData.tasks || [];
-                    events = importedData.events || [];
-                    if (importedData.apiKey) {
-                        localStorage.setItem(API_KEY_STORAGE_KEY, importedData.apiKey);
-                        showCustomAlert("Data imported successfully, and API Key applied!");
-                    } else {
-                        localStorage.removeItem(API_KEY_STORAGE_KEY);
-                        showCustomAlert("Data imported successfully! No API Key was found in the data.");
-                    }
-                } else {
-                    throw new Error('Invalid data format.');
-                }
-                sortTasksByDueDate();
-                saveAllData();
-                renderApp();
-                closeSettingsModal();
-            } catch (e) {
-                console.error('Import failed:', e);
-                showCustomAlert("Import failed: Invalid data format.");
+importButton.addEventListener('click', () => {
+    try {
+        const importedData = JSON.parse(atob(importDataTextarea.value));
+        if (Array.isArray(importedData)) { // Old format, only tasks
+            tasks = importedData;
+            events = [];
+            localStorage.removeItem(API_KEY_STORAGE_KEY);
+            showCustomAlert("Data imported successfully! No API Key or events were found in the data.");
+        } else if (typeof importedData === 'object' && importedData.tasks) {
+            tasks = importedData.tasks || [];
+            events = importedData.events || [];
+            if (importedData.apiKey) {
+                localStorage.setItem(API_KEY_STORAGE_KEY, importedData.apiKey);
+                showCustomAlert("Data imported successfully, and API Key applied!");
+            } else {
+                localStorage.removeItem(API_KEY_STORAGE_KEY);
+                showCustomAlert("Data imported successfully! No API Key was found in the data.");
             }
-        });
+        } else {
+            throw new Error('Invalid data format.');
+        }
+        sortTasksByDueDate();
+        saveAllData();
+        renderApp();
+        closeSettingsModal();
+    } catch(e){ 
+        showCustomAlert('Invalid or corrupted backup file.'); 
+        console.error(e); 
+    }
+});
 
 
         // Gemini Chat Functionality
@@ -2355,8 +2476,173 @@
         }
 
 
+
+// === Auth UI and data syncing ===
+const authView = document.getElementById('auth-view');
+const appView = document.getElementById('app-view');
+const authForm = document.getElementById('auth-form');
+const authEmail = document.getElementById('auth-email');
+const authPassword = document.getElementById('auth-password');
+const authSubmit = document.getElementById('auth-submit');
+const toggleAuthBtn = document.getElementById('toggle-auth-mode');
+const authModeText = document.getElementById('auth-mode-text');
+const authError = document.getElementById('auth-error');
+const signOutButton = document.getElementById('sign-out-button');
+const userEmailSpan = document.getElementById('user-email');
+
+let isRegisterMode = false;
+
+toggleAuthBtn.addEventListener('click', () => {
+  isRegisterMode = !isRegisterMode;
+  authSubmit.textContent = isRegisterMode ? 'Create account' : 'Log in';
+  authModeText.textContent = isRegisterMode ? 'Already have an account?' : 'New here?';
+  toggleAuthBtn.textContent = isRegisterMode ? 'Log in' : 'Create an account';
+  authError.classList.add('hidden');
+});
+
+authForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  authSubmit.disabled = true;
+  authSubmit.textContent = isRegisterMode ? 'Creating...' : 'Logging in...';
+  authError.classList.add('hidden');
+  try{
+    if(isRegisterMode){
+      await createUserWithEmailAndPassword(auth, authEmail.value.trim(), authPassword.value.trim());
+    } else {
+      await signInWithEmailAndPassword(auth, authEmail.value.trim(), authPassword.value.trim());
+    }
+  } catch(err){
+    authError.textContent = err.message;
+    authError.classList.remove('hidden');
+  } finally {
+    authSubmit.disabled = false;
+    authSubmit.textContent = isRegisterMode ? 'Create account' : 'Log in';
+  }
+});
+
+signOutButton.addEventListener('click', async ()=>{
+  try { await signOut(auth); }
+catch(e){ console.error('Sign out error', e); }});
+
+async function ensureUserDoc(){
+  if(!userDocRef) return;
+  const snap = await getDoc(userDocRef);
+  if(!snap.exists()){
+    await setDoc(userDocRef, {
+      tasks: [],
+      events: [],
+      settings: collectSettingsFromLocal(),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+  }
+}
+
+function startUserSnapshot(){
+  if(unsubscribeUserDoc) unsubscribeUserDoc();
+  unsubscribeUserDoc = onSnapshot(userDocRef, (snap)=>{
+    if(snap.exists()){
+      const data = snap.data() || {};
+      tasks = Array.isArray(data.tasks) ? data.tasks : [];
+      events = Array.isArray(data.events) ? data.events : [];
+      if (data.settings) {
+        applySettingsToUI(data.settings);
+      }
+      sortTasksByDueDate();
+      renderApp();
+    }
+  }, (err)=> console.error('onSnapshot error', err));
+}
+
+onAuthStateChanged(auth, async (user)=>{
+  currentUser = user || null;
+  if(currentUser){
+    userEmailSpan.textContent = currentUser.email || '';
+    userEmailSpan.classList.remove('hidden');
+    signOutButton.classList.remove('hidden');
+    authView.classList.add('hidden');
+    appView.classList.remove('hidden');
+
+    userDocRef = doc(db, 'users', currentUser.uid);
+    await ensureUserDoc();
+    startUserSnapshot();
+    // Save current local settings mirror to Firestore (merge)
+    saveAllDataFirestore();
+  } else {
+    if(unsubscribeUserDoc) unsubscribeUserDoc();
+    userEmailSpan.classList.add('hidden');
+    signOutButton.classList.add('hidden');
+    appView.classList.add('hidden');
+    authView.classList.remove('hidden');
+    tasks = [];
+    events = [];
+  }
+});
+
+// When settings change locally, mirror to Firestore
+['dark-mode-toggle','particles-toggle','logo-toggle','clock-toggle','clock-style','save-logo-url-button'].forEach(id=>{ const el=document.getElementById(id); if(!el) return; const type = el.tagName==='BUTTON' ? 'click':'change'; el.addEventListener(type, ()=> debounceSave()); });
+document.addEventListener('mouseup', (e)=>{
+  // capture clock drag end to save position if it just changed
+  if (typeof isDraggingClock !== 'undefined' && !isDraggingClock) return;
+  debounceSave();
+});
+
+
+
+        // Logout & Delete Account (Settings > Danger Zone)
+        const logoutButton = document.getElementById('logout-button');
+        const deleteAccountButton = document.getElementById('delete-account-button');
+
+        if (logoutButton) {
+            logoutButton.addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    closeSettingsModal();
+                } catch (e) {
+                    console.error('Sign out failed:', e);
+                    showCustomAlert('Failed to sign out. Please try again.');
+                }
+            });
+        }
+
+        if (deleteAccountButton) {
+            deleteAccountButton.addEventListener('click', async () => {
+                // Immediate action—no extra "click to confirm" per your preference.
+                try {
+                    if (!currentUser) {
+                        showCustomAlert('You need to be logged in to delete your account.');
+                        return;
+                    }
+                    // Clear in-memory data first
+                    tasks = [];
+                    events = [];
+                    // Delete Firestore doc
+                    try {
+                        if (!userDocRef) {
+                            userDocRef = doc(db, 'users', currentUser.uid);
+                        }
+                        await deleteDoc(userDocRef);
+                    } catch (e) {
+                        // If doc doesn't exist or deletion fails, continue to account deletion
+                        console.warn('User doc deletion warning:', e);
+                    }
+                    // Delete the auth user
+                    await deleteUser(currentUser);
+                    showCustomAlert('Your account has been deleted.');
+                    closeSettingsModal();
+                } catch (e) {
+                    console.error('Delete account error:', e);
+                    if (e && e.code === 'auth/requires-recent-login') {
+                        showCustomAlert('For your security, please sign in again, then delete your account.');
+                    } else {
+                        showCustomAlert('Could not delete account. Please try again.');
+                    }
+                }
+            });
+        }
+
+
         window.onload = () => {
-            loadAllData();
             loadTheme();
             loadParticlesState();
             loadLogoState();
@@ -2366,6 +2652,7 @@
             setInterval(updateClock, 1000);
         };
     </script>
-</body>
+    </div> <!-- end #app-view -->
 
+</body>
 </html>
